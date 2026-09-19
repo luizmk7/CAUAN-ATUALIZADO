@@ -1,0 +1,6 @@
+{
+  "name": "Cauan | Vídeo e fotografia para empresas e eventos",
+  "description": "Produção de vídeos e fotografia para empresas, formaturas, eventos, aniversários e casamentos. Registros com intenção, técnica e cuidado com cada história.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
