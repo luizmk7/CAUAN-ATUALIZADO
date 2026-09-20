@@ -64,21 +64,30 @@
     video.addEventListener('error', () => {
       blocked.add(i);
       updateControls();
-      if (active === i) byId('cinema-play-text').textContent = 'Tentar novamente';
+      const playText = byId('cinema-play-text');
+      if (active === i && playText) playText.textContent = 'Tentar novamente';
     });
   });
   stage.append(nav);
 
   function updateControls() {
-    const playing = !videos[active].paused;
-    byId('cinema-play-icon').textContent = playing ? 'Ⅱ' : '▷';
-    byId('cinema-play-text').textContent = playing ? 'Pausar' : 'Reproduzir';
-    play.setAttribute('aria-label', playing ? 'Pausar vídeo' : 'Reproduzir vídeo');
-    play.setAttribute('aria-pressed', String(playing));
-    byId('cinema-audio-icon').textContent = soundOn ? '♪' : '♪';
-    byId('cinema-audio-text').textContent = soundOn ? 'Som ligado' : 'Ativar som';
-    sound.setAttribute('aria-pressed', String(soundOn));
-    sound.setAttribute('aria-label', soundOn ? 'Desativar som' : 'Ativar som');
+    const playing = videos[active] && !videos[active].paused;
+    const playIcon = byId('cinema-play-icon');
+    const playText = byId('cinema-play-text');
+    if (playIcon) playIcon.textContent = playing ? 'Ⅱ' : '▷';
+    if (playText) playText.textContent = playing ? 'Pausar' : 'Reproduzir';
+    if (play) {
+      play.setAttribute('aria-label', playing ? 'Pausar vídeo' : 'Reproduzir vídeo');
+      play.setAttribute('aria-pressed', String(playing));
+    }
+    const audioIcon = byId('cinema-audio-icon');
+    const audioText = byId('cinema-audio-text');
+    if (audioIcon) audioIcon.textContent = soundOn ? '♪' : '♪';
+    if (audioText) audioText.textContent = soundOn ? 'Som ligado' : 'Ativar som';
+    if (sound) {
+      sound.setAttribute('aria-pressed', String(soundOn));
+      sound.setAttribute('aria-label', soundOn ? 'Desativar som' : 'Ativar som');
+    }
   }
   function startVideo(index) {
     const video = videos[index];
@@ -180,37 +189,46 @@
     const top = section.getBoundingClientRect().top + scrollY - topOffset;
     scrollTo({top: top + (lead + index + .4) * unit, behavior: 'smooth'});
   }
-  play.addEventListener('click', () => {
-    const video = videos[active];
-    if (!video.paused) { manualPause.add(active); video.pause(); }
-    else { manualPause.delete(active); blocked.delete(active); startVideo(active); }
-    updateControls();
-  });
-  sound.addEventListener('click', () => {
-    soundOn = !soundOn;
-    videos.forEach((video, i) => { video.muted = i === active ? !soundOn : true; });
-    blocked.delete(active);
-    manualPause.delete(active);
-    startVideo(active);
-    updateControls();
-  });
-  fullscreen.addEventListener('click', () => {
-    const video = videos[active];
-    if (video.requestFullscreen) video.requestFullscreen().catch(() => {});
-    else if (video.webkitEnterFullscreen) video.webkitEnterFullscreen();
-    else goTo(active);
-  });
-  skip.addEventListener('click', e => {
-    e.preventDefault();
-    videos.forEach(video => video.pause());
-    const next = document.getElementById('formatos');
-    if (next) {
-      next.tabIndex = -1;
-      // An immediate skip avoids sweeping through every film on the way out.
-      scrollTo({top: next.getBoundingClientRect().top + scrollY - topOffset, behavior: 'instant'});
-      next.focus({preventScroll: true});
-    }
-  });
+  if (play) {
+    play.addEventListener('click', () => {
+      const video = videos[active];
+      if (!video) return;
+      if (!video.paused) { manualPause.add(active); video.pause(); }
+      else { manualPause.delete(active); blocked.delete(active); startVideo(active); }
+      updateControls();
+    });
+  }
+  if (sound) {
+    sound.addEventListener('click', () => {
+      soundOn = !soundOn;
+      videos.forEach((video, i) => { video.muted = i === active ? !soundOn : true; });
+      blocked.delete(active);
+      manualPause.delete(active);
+      startVideo(active);
+      updateControls();
+    });
+  }
+  if (fullscreen) {
+    fullscreen.addEventListener('click', () => {
+      const video = videos[active];
+      if (!video) return;
+      if (video.requestFullscreen) video.requestFullscreen().catch(() => {});
+      else if (video.webkitEnterFullscreen) video.webkitEnterFullscreen();
+      else goTo(active);
+    });
+  }
+  if (skip) {
+    skip.addEventListener('click', e => {
+      e.preventDefault();
+      videos.forEach(video => video.pause());
+      const next = document.getElementById('formatos');
+      if (next) {
+        next.tabIndex = -1;
+        scrollTo({top: next.getBoundingClientRect().top + scrollY - topOffset, behavior: 'instant'});
+        next.focus({preventScroll: true});
+      }
+    });
+  }
   stage.addEventListener('keydown', e => {
     if (reduced || (e.key !== 'ArrowRight' && e.key !== 'ArrowLeft')) return;
     e.preventDefault();
