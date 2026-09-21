@@ -81,14 +81,35 @@
         </div>
 
         <div class="hero-visual">
+          <!-- Stats flutuantes do mobile (inspirados na referência visual) -->
+          <div class="hero-visual-stats" aria-hidden="true">
+            <div class="visual-stat-item stat-top-left">
+              <strong class="visual-stat-number counter" data-target="80" data-prefix="+">+80</strong>
+              <span class="visual-stat-label">Projetos realizados</span>
+            </div>
+            <div class="visual-stat-item stat-top-right">
+              <strong class="visual-stat-number counter" data-target="2" data-suffix=" anos">2 anos</strong>
+              <span class="visual-stat-label">Experiência</span>
+            </div>
+            <div class="visual-stat-item stat-mid-right">
+              <strong class="visual-stat-number">100%</strong>
+              <span class="visual-stat-label">Dedicação & foco</span>
+            </div>
+          </div>
+
           <div class="hero-photo-container">
             <img src="https://res.cloudinary.com/lvl0nq3r/image/upload/v1789787474/imagem_3_lobboe.webp" alt="Cauan, videomaker e fotógrafo profissional com câmera" class="hero-portrait-cutout" fetchpriority="high">
           </div>
 
           <div class="hero-glass-card">
             <div class="glass-content">
-              <span class="glass-tag"><span class="pulse-dot" aria-hidden="true"></span> CAUAN · VIDEOMAKER & FOTÓGRAFO</span>
-              <h3 class="glass-title">Histórias reais.<br>Imagens com intenção.<br>Um olhar que faz diferença.</h3>
+              <!-- Versão Desktop -->
+              <span class="glass-tag glass-tag-desktop"><span class="pulse-dot" aria-hidden="true"></span> CAUAN · VIDEOMAKER & FOTÓGRAFO</span>
+              <h3 class="glass-title glass-title-desktop">Histórias reais.<br>Imagens com intenção.<br>Um olhar que faz diferença.</h3>
+
+              <!-- Versão Mobile (Baseada na referência do card: "Select project / Available for projects") -->
+              <span class="glass-tag glass-tag-mobile">Solicitar projeto</span>
+              <h3 class="glass-title glass-title-mobile">Disponível para projetos</h3>
             </div>
             <a href="#contato" class="glass-action-btn" aria-label="Falar sobre projeto">
               <span>↗</span>
