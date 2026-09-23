@@ -166,7 +166,7 @@ function openModal(data, triggerEl){
       vid.src=data.videoSrc;
       vid.load();
     }
-    if(typeEl)typeEl.textContent='🎥 Vídeo';
+    if(typeEl)typeEl.innerHTML='<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polygon points="23 7 16 12 23 17 23 7"></polygon><rect x="1" y="5" width="15" height="14" rx="2" ry="2"></rect></svg><span>Vídeo</span>';
   }else{
     if(vidBox)vidBox.hidden=true;
     if(vid){
@@ -179,16 +179,17 @@ function openModal(data, triggerEl){
       img.src=data.image||'';
       img.alt=data.title||'Trabalho do portfólio de Cauan';
     }
-    if(typeEl)typeEl.textContent='📷 Fotografia';
+    if(typeEl)typeEl.innerHTML='<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"></path><circle cx="12" cy="13" r="4"></circle></svg><span>Fotografia</span>';
   }
 
   if(extLink){
+    const arrowSvg = '<svg class="ui-arrow" viewBox="0 0 10 10" width="10" height="10" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 8L8 2M8 2H3.5M8 2V6.5"/></svg>';
     if(data.link){
       extLink.href=data.link;
-      extLink.textContent='Ver este trabalho ↗';
+      extLink.innerHTML=`Ver este trabalho ${arrowSvg}`;
     }else{
       extLink.href='https://www.instagram.com/cauanvideomaker_/';
-      extLink.textContent='Ver mais no Instagram ↗';
+      extLink.innerHTML=`Ver mais no Instagram ${arrowSvg}`;
     }
   }
 

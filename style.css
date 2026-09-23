@@ -1450,19 +1450,20 @@ section#sobre {
 }
 
 .format-checklist li::before {
-  content: '✓';
+  content: '';
   position: absolute;
-  left: 0;
-  top: 0;
-  font-family: 'Manrope', sans-serif;
-  font-weight: 800;
-  font-size: 13px;
-  color: #111317;
+  left: 2px;
+  top: 5px;
+  width: 4px;
+  height: 8px;
+  border: solid #111317;
+  border-width: 0 2px 2px 0;
+  transform: rotate(45deg);
 }
 
 .format-checklist-dark li::before {
-  color: #38ef7d;
-  text-shadow: 0 0 8px rgba(56, 239, 125, 0.35);
+  border-color: #38ef7d;
+  box-shadow: 1px 1px 6px rgba(56, 239, 125, 0.4);
 }
 
 /* Ações e botões */
@@ -2163,17 +2164,19 @@ html {
 }
 
 .sidebar-checklist li::before {
-  content: '✓';
+  content: '';
   position: absolute;
-  left: 0;
-  color: #171719;
-  font-family: 'Manrope', sans-serif;
-  font-weight: 800;
-  font-size: 12px;
+  left: 2px;
+  top: 5px;
+  width: 4px;
+  height: 8px;
+  border: solid #171719;
+  border-width: 0 2px 2px 0;
+  transform: rotate(45deg);
 }
 
 .checklist-dark li::before {
-  color: #F5F5F3 !important;
+  border-color: #38ef7d !important;
 }
 
 .sidebar-checklist li strong {
@@ -4463,4 +4466,86 @@ dialog .close:hover {
     line-height: 1.18 !important;
   }
 }
+
+/* ============================================================
+   ANTI-EMOJI E SETAS VETORIAIS DE ALTA DEFINIÇÃO (iOS / WebKit)
+   ============================================================ */
+
+/* Bloqueia a substituição automática por emojis coloridos do iOS */
+@supports (font-variant-emoji: text) {
+  html, body, button, a, span, p, h1, h2, h3, h4, h5, h6, select, input, textarea {
+    font-variant-emoji: text;
+  }
+}
+
+.no-emoji {
+  font-family: 'Manrope', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif !important;
+  font-variant-emoji: text !important;
+  font-style: normal !important;
+}
+
+/* Setas vetoriais SVG imunes a emojis e perfeitamente alinhadas */
+.ui-arrow {
+  display: inline-block;
+  vertical-align: middle;
+  width: 10px;
+  height: 10px;
+  margin-left: 5px;
+  position: relative;
+  top: -1px;
+  flex-shrink: 0;
+  transition: transform 0.22s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.ui-arrow-up,
+.ui-arrow-down {
+  display: inline-block;
+  vertical-align: middle;
+  width: 10px;
+  height: 10px;
+  margin-left: 5px;
+  position: relative;
+  top: -1px;
+  flex-shrink: 0;
+}
+
+/* Microinteração elegante no hover */
+a:hover .ui-arrow,
+button:hover .ui-arrow,
+.work-card:hover .ui-arrow,
+.btn-format:hover .ui-arrow,
+.cat-modal-discreet-cta:hover .ui-arrow {
+  transform: translate(2px, -2px);
+}
+
+/* Alinhamento dos ícones de modal type indicator */
+.modal-type-indicator {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-family: 'Manrope', sans-serif;
+  font-size: 11px;
+  font-weight: 700;
+  color: #8c94a2;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+.modal-type-indicator svg {
+  color: #38ef7d;
+  flex-shrink: 0;
+}
+
+/* Botão de ação com seta do Hero */
+.glass-action-btn {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+}
+
+.glass-action-btn .ui-arrow {
+  margin: 0 !important;
+  top: 0 !important;
+}
+
 
