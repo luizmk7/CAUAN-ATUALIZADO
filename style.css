@@ -1852,6 +1852,82 @@ html {
   margin: 0;
 }
 
+/* Aviso Sutil e Discreto de Cinematografia Mobile */
+.category-tech-note {
+  display: inline-flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 6px;
+  margin-bottom: 12px;
+  padding: 0;
+  background: transparent;
+  border: none;
+  box-shadow: none;
+  opacity: 1;
+  transition: opacity 0.2s ease;
+}
+
+.category-tech-note:hover {
+  opacity: 1;
+}
+
+.tech-note-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-family: 'Manrope', -apple-system, BlinkMacSystemFont, sans-serif;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: #DCE3EE;
+}
+
+.tech-note-pill svg {
+  color: #B4C4DA;
+  opacity: 1;
+  flex-shrink: 0;
+}
+
+.tech-note-desc {
+  font-size: 12px;
+  color: #B0BAC9;
+  font-weight: 400;
+  letter-spacing: -0.01em;
+  position: relative;
+  padding-left: 9px;
+}
+
+.tech-note-desc::before {
+  content: '·';
+  position: absolute;
+  left: 0;
+  color: rgba(255, 255, 255, 0.4);
+}
+
+/* Adaptação refinada para seções claras (Formaturas e Aniversários) */
+.category-block-light .category-tech-note .tech-note-pill,
+.category-block-subtle .category-tech-note .tech-note-pill {
+  color: #555E70;
+}
+
+.category-block-light .category-tech-note .tech-note-pill svg,
+.category-block-subtle .category-tech-note .tech-note-pill svg {
+  color: #6C7689;
+  opacity: 0.9;
+}
+
+.category-block-light .category-tech-note .tech-note-desc,
+.category-block-subtle .category-tech-note .tech-note-desc {
+  color: #768194;
+}
+
+.category-block-light .category-tech-note .tech-note-desc::before,
+.category-block-subtle .category-tech-note .tech-note-desc::before {
+  color: rgba(17, 19, 23, 0.28);
+}
+
 /* Grids de Mostruário */
 .showcase-split {
   display: grid;
@@ -1932,6 +2008,7 @@ html {
   width: 100%;
   height: 100%;
   object-fit: cover;
+  object-position: center 25%;
   display: block;
   transform: scale(1.0);
   transition: transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
@@ -2547,7 +2624,7 @@ dialog .close:hover {
   padding: 0;
   background: #0b0d12;
   color: #f7f8fa;
-  max-width: 820px;
+  max-width: 1120px;
   width: 95vw;
   box-shadow: 0 30px 80px rgba(0, 0, 0, 0.85);
   overflow: hidden;
@@ -2666,25 +2743,46 @@ dialog .close:hover {
   transform: scale(1.05);
 }
 
-/* Feed de Fotos Maiores sem Títulos/Subtítulos */
+/* Feed / Galeria em Alvenaria (Masonry) preservando formato vertical e horizontal */
 .cat-modal-photos-list {
+  column-count: 3;
+  column-gap: 16px;
   padding: 20px;
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
+}
+
+@media (max-width: 900px) {
+  .cat-modal-photos-list {
+    column-count: 2;
+    column-gap: 14px;
+    padding: 16px;
+  }
+}
+
+@media (max-width: 540px) {
+  .cat-modal-photos-list {
+    column-count: 1;
+    padding: 14px;
+  }
 }
 
 .cat-large-photo-card {
+  break-inside: avoid;
+  margin-bottom: 16px;
   background: #11141b;
-  border-radius: 14px;
+  border-radius: 12px;
   border: 1px solid rgba(255, 255, 255, 0.08);
   overflow: hidden;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
-  transition: border-color 0.2s ease;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+  transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.2s ease, box-shadow 0.25s ease;
+  cursor: pointer;
 }
 
-.cat-large-photo-card:hover {
-  border-color: rgba(255, 255, 255, 0.16);
+.cat-large-photo-card:hover,
+.cat-large-photo-card:focus-visible {
+  border-color: rgba(255, 255, 255, 0.25);
+  transform: translateY(-3px);
+  box-shadow: 0 14px 32px rgba(0, 0, 0, 0.6);
+  outline: none;
 }
 
 .cat-large-photo-frame {
@@ -2699,9 +2797,14 @@ dialog .close:hover {
 .cat-large-photo-frame img {
   width: 100%;
   height: auto;
-  max-height: 80vh;
-  object-fit: cover;
+  max-height: 85vh;
+  object-fit: contain;
   display: block;
+  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.cat-large-photo-card:hover .cat-large-photo-frame img {
+  transform: scale(1.02);
 }
 
 /* Responsividade Mobile e Tablet para o Portfólio */
@@ -2741,12 +2844,26 @@ dialog .close:hover {
   .category-block-header {
     flex-direction: column;
     align-items: flex-start;
-    gap: 16px;
-    margin-bottom: 28px;
+    gap: 12px;
+    margin-bottom: 20px;
   }
 
   .category-block-header h2 {
     font-size: 26px;
+    margin: 6px 0 0;
+  }
+
+  /* Oculta os parágrafos longos na versão mobile, mantendo o aviso de registro mobile direto e visível logo abaixo do título */
+  .category-block-desc,
+  .desc-dark {
+    display: none !important;
+  }
+
+  .category-tech-note {
+    display: inline-flex !important;
+    margin-top: 8px;
+    margin-bottom: 4px;
+    gap: 6px 8px;
   }
 
   .showcase-split {
@@ -3662,9 +3779,11 @@ dialog .close:hover {
     display: flex !important;
     justify-content: center !important;
     align-items: center !important;
-    gap: 7px !important;
+    flex-wrap: wrap !important;
+    max-width: 92vw !important;
+    gap: 6px !important;
     margin: 18px auto 6px !important;
-    padding: 0 !important;
+    padding: 0 8px !important;
   }
 
   .carousel-dot {

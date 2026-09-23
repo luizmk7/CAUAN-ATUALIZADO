@@ -247,26 +247,24 @@ if(dialog){
 // ============================================================
 // GALERIA EXPANDIDA POR CATEGORIA (MODAL DE MAIS FOTOS)
 // ============================================================
+const getCategoryItems = (cat) => {
+  if (typeof PORTFOLIO_MANIFEST !== 'undefined' && Array.isArray(PORTFOLIO_MANIFEST)) {
+    const matched = PORTFOLIO_MANIFEST.filter(i => i.category === cat).map(i => ({ src: i.url, alt: i.alt || i.title }));
+    if (matched.length > 0) return matched;
+  }
+  return [];
+};
+
 const categoryGalleries = {
   formaturas: {
     title: 'Galeria · Formaturas',
     whatsappMessage: 'Olá, Cauan! Vi a galeria de Formaturas no site e gostaria de solicitar um orçamento para o meu evento.',
-    items: [
-      { src: 'https://images.unsplash.com/photo-1523240795612-9a054b0db644?auto=format&fit=crop&w=1200&q=85', alt: 'Formatura - Celebração de conquista' },
-      { src: 'https://images.unsplash.com/photo-1541339907198-e08756dedf3f?auto=format&fit=crop&w=1200&q=85', alt: 'Formatura - Ensaio com toga' },
-      { src: 'https://images.unsplash.com/photo-1627556704302-624286467c65?auto=format&fit=crop&w=1200&q=85', alt: 'Formatura - Turma reunida' },
-      { src: 'https://images.unsplash.com/photo-1535982330050-f1c2fb79ff78?auto=format&fit=crop&w=1200&q=85', alt: 'Formatura - Palco oficial' }
-    ]
+    items: getCategoryItems('formaturas')
   },
   eventos: {
     title: 'Galeria · Eventos & Shows',
     whatsappMessage: 'Olá, Cauan! Vi a galeria de Eventos no site e gostaria de solicitar um orçamento para cobertura.',
-    items: [
-      { src: 'https://images.unsplash.com/photo-1470225620780-dba8ba36b745?auto=format&fit=crop&w=1200&q=85', alt: 'Evento - Palco, som e luz cênica' },
-      { src: 'https://images.unsplash.com/photo-1514525253161-7a46d19cd819?auto=format&fit=crop&w=1200&q=85', alt: 'Evento - Vibração do público' },
-      { src: 'https://images.unsplash.com/photo-1501386761578-eac5c94b800a?auto=format&fit=crop&w=1200&q=85', alt: 'Evento - Show ao vivo' },
-      { src: 'https://images.unsplash.com/photo-1492684223066-81342ee5ff30?auto=format&fit=crop&w=1200&q=85', alt: 'Evento - Festa e atmosfera noturna' }
-    ]
+    items: getCategoryItems('eventos')
   },
   aniversarios: {
     title: 'Galeria · Aniversários',
@@ -281,12 +279,7 @@ const categoryGalleries = {
   casamentos: {
     title: 'Galeria · Casamentos',
     whatsappMessage: 'Olá, Cauan! Vi a galeria de Casamentos no site e gostaria de conversar sobre a cobertura da minha data.',
-    items: [
-      { src: 'https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&w=1200&q=85', alt: 'Casamento - Cumplicidade a dois' },
-      { src: 'https://images.unsplash.com/photo-1511285560929-80b456fea0bc?auto=format&fit=crop&w=1200&q=85', alt: 'Casamento - Cerimônia e votos' },
-      { src: 'https://images.unsplash.com/photo-1583939003579-730e3918a45a?auto=format&fit=crop&w=1200&q=85', alt: 'Casamento - Preparativos e making of' },
-      { src: 'https://images.unsplash.com/photo-1520854221256-17451cc331bf?auto=format&fit=crop&w=1200&q=85', alt: 'Casamento - Dança e festa' }
-    ]
+    items: getCategoryItems('casamentos')
   }
 };
 
@@ -308,12 +301,15 @@ function openCategoryModal(catKey, triggerEl) {
   const waUrl = `https://wa.me/5577988629229?text=${encodeURIComponent(gallery.whatsappMessage)}`;
   if (waBtn) waBtn.href = waUrl;
 
-  // Renderiza apenas as fotos grandes e limpas, sem títulos nem subtítulos
+  // Renderiza fotos no layout de galeria preservando orientação vertical e horizontal
   if (photosList) {
     photosList.innerHTML = '';
-    gallery.items.forEach((item) => {
+    gallery.items.forEach((item, index) => {
       const card = document.createElement('article');
       card.className = 'cat-large-photo-card';
+      card.setAttribute('role', 'button');
+      card.setAttribute('tabindex', '0');
+      card.setAttribute('aria-label', `Ampliar imagem: ${item.alt || gallery.title}`);
 
       const frame = document.createElement('div');
       frame.className = 'cat-large-photo-frame';
@@ -321,9 +317,32 @@ function openCategoryModal(catKey, triggerEl) {
       const img = document.createElement('img');
       img.src = item.src;
       img.alt = item.alt || gallery.title;
-      img.loading = 'lazy';
+      img.loading = index < 6 ? 'eager' : 'lazy';
       img.decoding = 'async';
       img.referrerPolicy = 'no-referrer';
+
+      img.addEventListener('error', () => {
+        card.style.display = 'none';
+      });
+
+      // Clique abre no visualizador individual de detalhes
+      card.addEventListener('click', () => {
+        const detailData = {
+          title: item.title || gallery.title,
+          category: gallery.title.replace('Galeria · ', ''),
+          mediaType: 'photo',
+          image: item.src,
+          caption: item.caption || item.alt || ''
+        };
+        openModal(detailData, card);
+      });
+
+      card.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          card.click();
+        }
+      });
 
       frame.appendChild(img);
       card.appendChild(frame);
@@ -428,6 +447,17 @@ $$('.work-card').forEach(card=>{
         link:card.dataset.link
       };
       openModal(d,card);
+    }
+  });
+});
+
+// Fallback gracioso para falha de carregamento de imagens remotas
+$$('.work-card img').forEach(img => {
+  img.addEventListener('error', () => {
+    const card = img.closest('.work-card');
+    if (card) {
+      card.style.display = 'none';
+      console.warn('Card ocultado com segurança devido a erro na imagem:', img.src);
     }
   });
 });
