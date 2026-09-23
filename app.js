@@ -320,12 +320,11 @@ function openCategoryModal(catKey, triggerEl) {
   catLastFocused = triggerEl || document.activeElement;
 
   const titleEl = $('#cat-modal-title');
-  const waBtn = $('#cat-modal-wa-btn');
+  const instaBtn = $('#cat-modal-insta-btn') || $('#cat-modal-wa-btn');
   const photosList = $('#cat-modal-photos-list');
 
   if (titleEl) titleEl.textContent = gallery.title;
-  const waUrl = `https://wa.me/5577988629229?text=${encodeURIComponent(gallery.whatsappMessage)}`;
-  if (waBtn) waBtn.href = waUrl;
+  if (instaBtn) instaBtn.href = 'https://www.instagram.com/cauanvideomaker_/';
 
   // Renderiza fotos no layout de galeria preservando orientação vertical e horizontal
   if (photosList) {

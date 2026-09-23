@@ -2692,33 +2692,52 @@ dialog .close:hover {
   flex-shrink: 0;
 }
 
-/* Botão de Orçamento Discreto e Elegante */
+/* Botão Destaques do Instagram no Topo do Modal */
 .cat-modal-discreet-cta {
   display: inline-flex;
   align-items: center;
-  gap: 6px;
+  gap: 7px;
   padding: 6px 13px;
   border-radius: 9999px;
   background: rgba(255, 255, 255, 0.06);
-  border: 1px solid rgba(255, 255, 255, 0.14);
+  border: 1px solid rgba(255, 255, 255, 0.16);
   color: #e2e8f0;
   font-family: 'Manrope', sans-serif;
   font-size: 12px;
   font-weight: 600;
   text-decoration: none;
-  transition: all 0.2s ease;
+  transition: all 0.22s cubic-bezier(0.16, 1, 0.3, 1);
   white-space: nowrap;
 }
 
 .cat-modal-discreet-cta svg {
-  color: #4ade80;
+  color: #f43f5e;
+  flex-shrink: 0;
+  transition: transform 0.22s ease;
 }
 
 .cat-modal-discreet-cta:hover {
-  background: rgba(37, 211, 102, 0.12);
-  border-color: rgba(37, 211, 102, 0.35);
-  color: #86efac;
+  background: rgba(244, 63, 94, 0.12);
+  border-color: rgba(244, 63, 94, 0.4);
+  color: #ffffff;
   transform: translateY(-1px);
+}
+
+.cat-modal-discreet-cta:hover svg {
+  transform: scale(1.15);
+}
+
+.cat-modal-discreet-cta .cta-short-text {
+  display: none;
+}
+
+@media (max-width: 580px) {
+  .cat-modal-discreet-cta .cta-full-text {
+    display: none;
+  }
+  .cat-modal-discreet-cta .cta-short-text {
+    display: inline;
+  }
 }
 
 .cat-modal-close {
