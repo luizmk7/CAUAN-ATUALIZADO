@@ -2748,6 +2748,7 @@ dialog .close:hover {
   column-count: 3;
   column-gap: 16px;
   padding: 20px;
+  min-height: 280px;
 }
 
 @media (max-width: 900px) {
