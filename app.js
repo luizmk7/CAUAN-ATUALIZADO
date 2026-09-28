@@ -32,18 +32,125 @@ function getCloudinarySrcset(url, widths = [400, 650]) {
     .join(', ');
 }
 
-// Reveal animation observer
-const observer=new IntersectionObserver(es=>es.forEach(e=>{
-  if(e.isIntersecting){
-    e.target.classList.add('visible');
-    observer.unobserve(e.target);
+// Microanimações Refinadas (Apple-Grade Motion com IntersectionObserver)
+function initAppleMicroMotion() {
+  const isReduced = paused || matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if (!('IntersectionObserver' in window) || isReduced) {
+    return; // Mantém todo o conteúdo 100% visível caso sem suporte ou movimento reduzido
   }
-}),{threshold:.08});
 
-$$('.intro-kicker,.intro h2,.intro-desc,.stat-box,.portfolio-hub,.category-block,.services>div,.formats-header,.formats-footer,.process h2,.feedback h2,.faq>div,.contact>div').forEach(el=>{
-  el.classList.add('reveal');
-  observer.observe(el);
-});
+  document.documentElement.classList.add('has-micro-motion');
+
+  const revealObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        const el = entry.target;
+        el.classList.add('is-revealed');
+        revealObserver.unobserve(el);
+      }
+    });
+  }, {
+    rootMargin: '0px 0px -30px 0px',
+    threshold: 0.05
+  });
+
+  const registerReveal = (el, delay = 0) => {
+    if (!el) return;
+    el.classList.add('apple-reveal');
+    if (delay > 0) {
+      el.style.setProperty('--reveal-delay', `${delay}ms`);
+    }
+    const rect = el.getBoundingClientRect();
+    // Elementos já visíveis na tela inicial surgem prontamente sem esperar scroll
+    if (rect.top < window.innerHeight && rect.bottom > 0) {
+      el.classList.add('is-revealed');
+    } else {
+      revealObserver.observe(el);
+    }
+  };
+
+  // 1. Seção Sobre / Apresentação
+  $$('.intro-kicker, .intro h2, .intro-desc').forEach((el, idx) => {
+    registerReveal(el, Math.min(idx * 60, 240));
+  });
+  $$('.intro .stat-box').forEach((el, idx) => {
+    registerReveal(el, Math.min(idx * 60, 240));
+  });
+
+  // 2. Hub de Portfólio
+  $$('.portfolio-hub-header, .portfolio-hub-desc').forEach((el, idx) => {
+    registerReveal(el, Math.min(idx * 60, 240));
+  });
+
+  // 3. Categorias: Animação isolada do cabeçalho e sequência de cards (sem acumular no container)
+  $$('.category-block').forEach(cat => {
+    const header = cat.querySelector('.category-block-header');
+    if (header) registerReveal(header, 0);
+
+    const cards = cat.querySelectorAll('.category-cards-grid .work-card');
+    cards.forEach((card, idx) => {
+      registerReveal(card, Math.min(idx * 60, 240));
+    });
+
+    const footer = cat.querySelector('.category-footer-cta');
+    if (footer) registerReveal(footer, 100);
+  });
+
+  // 4. Formatos de Produção
+  const formatsHeader = $('.formats-header');
+  if (formatsHeader) registerReveal(formatsHeader, 0);
+
+  $$('.formats-grid .format-card').forEach((card, idx) => {
+    registerReveal(card, Math.min(idx * 70, 240));
+  });
+
+  const formatsFooter = $('.formats-footer');
+  if (formatsFooter) registerReveal(formatsFooter, 100);
+
+  // 5. Processo de Trabalho
+  $$('.process > .label, .process > h2').forEach((el, idx) => {
+    registerReveal(el, Math.min(idx * 60, 240));
+  });
+
+  $$('.steps .step-card').forEach((step, idx) => {
+    registerReveal(step, Math.min(idx * 50, 240));
+  });
+
+  // 6. FAQ
+  $$('.faq > div:first-child').forEach(el => registerReveal(el, 0));
+  $$('.faq details').forEach((d, idx) => {
+    registerReveal(d, Math.min(idx * 50, 240));
+  });
+
+  // 7. Contato
+  $$('.contact > div:first-child').forEach(el => registerReveal(el, 0));
+  const briefForm = $('#brief');
+  if (briefForm) registerReveal(briefForm, 60);
+}
+initAppleMicroMotion();
+
+// Transição suave de opacidade no carregamento das imagens (exceto hero cutout)
+function initImageSmoothFade() {
+  const isReduced = paused || matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if (isReduced) return;
+
+  const images = $$('img:not(.hero-portrait-cutout)');
+  images.forEach(img => {
+    if (img.complete && img.naturalWidth > 0) {
+      img.classList.add('is-img-ready');
+      return;
+    }
+    img.classList.add('apple-img-fade');
+    const onDone = () => {
+      img.classList.add('is-img-ready');
+      img.removeEventListener('load', onDone);
+      img.removeEventListener('error', onDone);
+    };
+    img.addEventListener('load', onDone, { once: true });
+    img.addEventListener('error', onDone, { once: true });
+  });
+}
+initImageSmoothFade();
 
 // Automatic Count-Up Counter Animation for Hero and Stats
 function initCounters(){
@@ -160,6 +267,9 @@ function motionState(){
     $$('.gear-camera-visual img,.gear-phone-visual img,.gear-visual img,.hero-portrait-cutout,.gear-title,.gear-copy').forEach(x=>{
       if(x){x.style.transform='';x.style.filter='';x.style.opacity='';}
     });
+    $$('.apple-reveal').forEach(el => el.classList.add('is-revealed'));
+    $$('img.apple-img-fade').forEach(img => img.classList.add('is-img-ready'));
+    $$('.cat-large-photo-card.apple-batch-card').forEach(c => c.classList.add('is-batch-shown'));
   }
   render();
   window.dispatchEvent(new CustomEvent('cauan:motion', {detail:{paused}}));
@@ -168,6 +278,13 @@ function motionState(){
 const motionBtn=$('#motion');
 if(motionBtn)motionBtn.addEventListener('click',()=>{paused=!paused;motionState()});
 motionState();
+
+if (window.matchMedia) {
+  matchMedia('(prefers-reduced-motion: reduce)').addEventListener('change', e => {
+    paused = e.matches;
+    motionState();
+  });
+}
 
 // Dialog modal for photos and videos preview
 const dialog=$('#gallery');
@@ -227,6 +344,7 @@ function openModal(data, triggerEl){
     }
   }
 
+  dialog.classList.remove('is-closing');
   dialog.showModal();
   document.body.style.overflow='hidden';
   if(data.mediaType==='video'&&data.videoSrc&&vid){
@@ -234,23 +352,38 @@ function openModal(data, triggerEl){
   }
 }
 
+let isClosingDialog = false;
 function closeModal(){
-  if(!dialog||!dialog.open)return;
-  const vid=$('#modal-video');
-  if(vid){
-    vid.pause();
-    vid.removeAttribute('src');
-    vid.load();
-  }
-  const img=$('#modal-img');
-  if(img){
-    img.removeAttribute('src');
-    img.removeAttribute('srcset');
-  }
-  dialog.close();
-  document.body.style.overflow='';
-  if(lastFocusedElement&&typeof lastFocusedElement.focus==='function'){
-    lastFocusedElement.focus();
+  if(!dialog||!dialog.open||isClosingDialog)return;
+  const isReduced = paused || matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  const finishClose = () => {
+    isClosingDialog = false;
+    const vid=$('#modal-video');
+    if(vid){
+      vid.pause();
+      vid.removeAttribute('src');
+      vid.load();
+    }
+    const img=$('#modal-img');
+    if(img){
+      img.removeAttribute('src');
+      img.removeAttribute('srcset');
+    }
+    dialog.classList.remove('is-closing');
+    try { dialog.close(); } catch(e){}
+    document.body.style.overflow='';
+    if(lastFocusedElement&&typeof lastFocusedElement.focus==='function'){
+      lastFocusedElement.focus();
+    }
+  };
+
+  if(isReduced){
+    finishClose();
+  } else {
+    isClosingDialog = true;
+    dialog.classList.add('is-closing');
+    setTimeout(finishClose, 160);
   }
 }
 
@@ -259,6 +392,8 @@ if(dialog){
   if(closeBtn)closeBtn.addEventListener('click',closeModal);
   dialog.addEventListener('close',()=>{
     document.body.style.overflow='';
+    isClosingDialog = false;
+    dialog.classList.remove('is-closing');
     const vid=$('#modal-video');
     if(vid){
       vid.pause();
@@ -385,12 +520,19 @@ function openCategoryModal(catKey, triggerEl) {
       let renderedCount = 0;
       let sentinel = null;
 
-      function createPhotoCard(item, index) {
+      function createPhotoCard(item, index, batchIndex = 0) {
         const card = document.createElement('article');
         card.className = 'cat-large-photo-card';
         card.setAttribute('role', 'button');
         card.setAttribute('tabindex', '0');
         card.setAttribute('aria-label', `Ampliar imagem: ${item.alt || gallery.title}`);
+
+        const isReduced = paused || matchMedia('(prefers-reduced-motion: reduce)').matches;
+        if (!isReduced) {
+          card.classList.add('apple-batch-card');
+          const delay = Math.min(batchIndex * 50, 240);
+          card.style.setProperty('--batch-stagger', `${delay}ms`);
+        }
 
         const frame = document.createElement('div');
         frame.className = 'cat-large-photo-frame';
@@ -406,6 +548,21 @@ function openCategoryModal(catKey, triggerEl) {
         img.referrerPolicy = 'no-referrer';
         img.width = item.width || 600;
         img.height = item.height || 800;
+
+        if (!isReduced) {
+          img.classList.add('apple-img-fade');
+          const onImgDone = () => {
+            img.classList.add('is-img-ready');
+            img.removeEventListener('load', onImgDone);
+            img.removeEventListener('error', onImgDone);
+          };
+          if (img.complete && img.naturalWidth > 0) {
+            img.classList.add('is-img-ready');
+          } else {
+            img.addEventListener('load', onImgDone, { once: true });
+            img.addEventListener('error', onImgDone, { once: true });
+          }
+        }
 
         img.addEventListener('error', () => {
           card.style.display = 'none';
@@ -438,9 +595,11 @@ function openCategoryModal(catKey, triggerEl) {
       function renderBatch() {
         const nextBatchEnd = Math.min(renderedCount + CAT_BATCH_SIZE, items.length);
         const fragment = document.createDocumentFragment();
+        const batchCards = [];
 
         for (let i = renderedCount; i < nextBatchEnd; i++) {
-          const card = createPhotoCard(items[i], i);
+          const card = createPhotoCard(items[i], i, i - renderedCount);
+          batchCards.push(card);
           fragment.appendChild(card);
         }
 
@@ -450,6 +609,15 @@ function openCategoryModal(catKey, triggerEl) {
           photosList.insertBefore(fragment, sentinel);
         } else {
           photosList.appendChild(fragment);
+        }
+
+        const isReduced = paused || matchMedia('(prefers-reduced-motion: reduce)').matches;
+        if (!isReduced) {
+          requestAnimationFrame(() => {
+            requestAnimationFrame(() => {
+              batchCards.forEach(c => c.classList.add('is-batch-shown'));
+            });
+          });
         }
 
         if (renderedCount >= items.length) {
@@ -493,24 +661,41 @@ function openCategoryModal(catKey, triggerEl) {
     }
   }
 
+  catModal.classList.remove('is-closing');
   catModal.showModal();
   document.body.style.overflow = 'hidden';
 
   if (wrapper) wrapper.scrollTop = 0;
 }
 
+let isClosingCatModal = false;
 function closeCategoryModal() {
-  if (!catModal || !catModal.open) return;
+  if (!catModal || !catModal.open || isClosingCatModal) return;
+  const isReduced = paused || matchMedia('(prefers-reduced-motion: reduce)').matches;
+
   if (catObserver) {
     catObserver.disconnect();
     catObserver = null;
   }
-  const photosList = $('#cat-modal-photos-list');
-  if (photosList) photosList.innerHTML = '';
-  catModal.close();
-  document.body.style.overflow = '';
-  if (catLastFocused && typeof catLastFocused.focus === 'function') {
-    catLastFocused.focus();
+
+  const finishClose = () => {
+    isClosingCatModal = false;
+    const photosList = $('#cat-modal-photos-list');
+    if (photosList) photosList.innerHTML = '';
+    catModal.classList.remove('is-closing');
+    try { catModal.close(); } catch(e){}
+    document.body.style.overflow = '';
+    if (catLastFocused && typeof catLastFocused.focus === 'function') {
+      catLastFocused.focus();
+    }
+  };
+
+  if (isReduced) {
+    finishClose();
+  } else {
+    isClosingCatModal = true;
+    catModal.classList.add('is-closing');
+    setTimeout(finishClose, 160);
   }
 }
 
@@ -520,6 +705,8 @@ if (catModal) {
 
   catModal.addEventListener('close', () => {
     document.body.style.overflow = '';
+    isClosingCatModal = false;
+    catModal.classList.remove('is-closing');
     if (catLastFocused && typeof catLastFocused.focus === 'function') {
       catLastFocused.focus();
     }
