@@ -2,6 +2,36 @@ const $=s=>document.querySelector(s);
 const $$=s=>[...document.querySelectorAll(s)];
 let paused=matchMedia('(prefers-reduced-motion: reduce)').matches;
 
+// Função central para geração de URLs otimizadas do Cloudinary
+function getOptimizedCloudinaryUrl(url, options = {}) {
+  if (!url || typeof url !== 'string') return url;
+  if (!url.includes('res.cloudinary.com')) return url;
+  const { width = null, quality = 'auto', format = 'auto', crop = 'limit' } = options;
+  const transforms = [];
+  if (format) transforms.push(`f_${format}`);
+  if (quality) transforms.push(`q_${quality}`);
+  if (crop) transforms.push(`c_${crop}`);
+  if (width) transforms.push(`w_${width}`);
+  const transformStr = transforms.join(',');
+  const uploadToken = '/image/upload/';
+  const uploadIndex = url.indexOf(uploadToken);
+  if (uploadIndex === -1) return url;
+  const prefix = url.slice(0, uploadIndex + uploadToken.length);
+  let rest = url.slice(uploadIndex + uploadToken.length);
+  const match = rest.match(/^(?:(?:[a-zA-Z0-9_,.-]+)\/)(v\d+\/.*)$/);
+  if (match) {
+    rest = match[1];
+  }
+  return `${prefix}${transformStr}/${rest}`;
+}
+
+function getCloudinarySrcset(url, widths = [400, 650]) {
+  if (!url || !url.includes('res.cloudinary.com')) return '';
+  return widths
+    .map(w => `${getOptimizedCloudinaryUrl(url, { width: w })} ${w}w`)
+    .join(', ');
+}
+
 // Reveal animation observer
 const observer=new IntersectionObserver(es=>es.forEach(e=>{
   if(e.isIntersecting){
@@ -176,8 +206,12 @@ function openModal(data, triggerEl){
     }
     if(img){
       img.hidden=false;
-      img.src=data.image||'';
+      const largeUrl = getOptimizedCloudinaryUrl(data.image, { width: 1400 });
+      img.src = largeUrl;
+      img.srcset = `${getOptimizedCloudinaryUrl(data.image, { width: 800 })} 800w, ${largeUrl} 1400w`;
+      img.sizes = '(max-width: 768px) 96vw, 1200px';
       img.alt=data.title||'Trabalho do portfólio de Cauan';
+      img.decoding='async';
     }
     if(typeEl)typeEl.innerHTML='<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"></path><circle cx="12" cy="13" r="4"></circle></svg><span>Fotografia</span>';
   }
@@ -207,6 +241,11 @@ function closeModal(){
     vid.pause();
     vid.removeAttribute('src');
     vid.load();
+  }
+  const img=$('#modal-img');
+  if(img){
+    img.removeAttribute('src');
+    img.removeAttribute('srcset');
   }
   dialog.close();
   document.body.style.overflow='';
@@ -312,6 +351,8 @@ const categoryGalleries = {
 
 const catModal = $('#category-gallery-modal');
 let catLastFocused = null;
+let catObserver = null;
+const CAT_BATCH_SIZE = 8;
 
 function openCategoryModal(catKey, triggerEl) {
   if (!catModal) return;
@@ -323,74 +364,149 @@ function openCategoryModal(catKey, triggerEl) {
   const titleEl = $('#cat-modal-title');
   const instaBtn = $('#cat-modal-insta-btn') || $('#cat-modal-wa-btn');
   const photosList = $('#cat-modal-photos-list');
+  const wrapper = catModal.querySelector('.cat-modal-wrapper');
 
   if (titleEl) titleEl.textContent = gallery.title;
   if (instaBtn) instaBtn.href = 'https://www.instagram.com/cauanvideomaker_/';
 
-  // Renderiza fotos no layout de galeria preservando orientação vertical e horizontal
+  // Desconecta observador prévio para evitar duplicação
+  if (catObserver) {
+    catObserver.disconnect();
+    catObserver = null;
+  }
+
+  // Renderiza fotos sob demanda em lotes para economia máxima de dados e carregamento veloz
   if (photosList) {
     photosList.innerHTML = '';
     const items = getCategoryItems(catKey);
     if (!items || items.length === 0) {
       photosList.innerHTML = '<div style="column-span: all; text-align: center; padding: 48px 20px; color: #8A92A2;"><p>Carregando fotos da galeria...</p></div>';
     } else {
-      items.forEach((item, index) => {
-      const card = document.createElement('article');
-      card.className = 'cat-large-photo-card';
-      card.setAttribute('role', 'button');
-      card.setAttribute('tabindex', '0');
-      card.setAttribute('aria-label', `Ampliar imagem: ${item.alt || gallery.title}`);
+      let renderedCount = 0;
+      let sentinel = null;
 
-      const frame = document.createElement('div');
-      frame.className = 'cat-large-photo-frame';
+      function createPhotoCard(item, index) {
+        const card = document.createElement('article');
+        card.className = 'cat-large-photo-card';
+        card.setAttribute('role', 'button');
+        card.setAttribute('tabindex', '0');
+        card.setAttribute('aria-label', `Ampliar imagem: ${item.alt || gallery.title}`);
 
-      const img = document.createElement('img');
-      img.src = item.src;
-      img.alt = item.alt || gallery.title;
-      img.loading = index < 6 ? 'eager' : 'lazy';
-      img.decoding = 'async';
-      img.referrerPolicy = 'no-referrer';
+        const frame = document.createElement('div');
+        frame.className = 'cat-large-photo-frame';
 
-      img.addEventListener('error', () => {
-        card.style.display = 'none';
-      });
+        const img = document.createElement('img');
+        const thumbUrl = getOptimizedCloudinaryUrl(item.src, { width: 650 });
+        img.src = thumbUrl;
+        img.srcset = getCloudinarySrcset(item.src, [400, 650]);
+        img.sizes = '(max-width: 540px) 92vw, (max-width: 900px) 46vw, 360px';
+        img.alt = item.alt || gallery.title;
+        img.loading = index < 4 ? 'eager' : 'lazy';
+        img.decoding = 'async';
+        img.referrerPolicy = 'no-referrer';
+        img.width = item.width || 600;
+        img.height = item.height || 800;
 
-      // Clique abre no visualizador individual de detalhes
-      card.addEventListener('click', () => {
-        const detailData = {
-          title: item.title || gallery.title,
-          category: gallery.title.replace('Galeria · ', ''),
-          mediaType: 'photo',
-          image: item.src,
-          caption: item.caption || item.alt || ''
-        };
-        openModal(detailData, card);
-      });
+        img.addEventListener('error', () => {
+          card.style.display = 'none';
+        });
 
-      card.addEventListener('keydown', (e) => {
-        if (e.key === 'Enter' || e.key === ' ') {
-          e.preventDefault();
-          card.click();
+        // Clique abre no visualizador individual de detalhes com alta resolução (w_1400)
+        card.addEventListener('click', () => {
+          const detailData = {
+            title: item.title || gallery.title,
+            category: gallery.title.replace('Galeria · ', ''),
+            mediaType: 'photo',
+            image: item.src,
+            caption: item.caption || item.alt || ''
+          };
+          openModal(detailData, card);
+        });
+
+        card.addEventListener('keydown', (e) => {
+          if (e.key === 'Enter' || e.key === ' ') {
+            e.preventDefault();
+            card.click();
+          }
+        });
+
+        frame.appendChild(img);
+        card.appendChild(frame);
+        return card;
+      }
+
+      function renderBatch() {
+        const nextBatchEnd = Math.min(renderedCount + CAT_BATCH_SIZE, items.length);
+        const fragment = document.createDocumentFragment();
+
+        for (let i = renderedCount; i < nextBatchEnd; i++) {
+          const card = createPhotoCard(items[i], i);
+          fragment.appendChild(card);
         }
-      });
 
-      frame.appendChild(img);
-      card.appendChild(frame);
-      photosList.appendChild(card);
-      });
+        renderedCount = nextBatchEnd;
+
+        if (sentinel && sentinel.parentNode === photosList) {
+          photosList.insertBefore(fragment, sentinel);
+        } else {
+          photosList.appendChild(fragment);
+        }
+
+        if (renderedCount >= items.length) {
+          if (catObserver) {
+            catObserver.disconnect();
+            catObserver = null;
+          }
+          if (sentinel && sentinel.parentNode) {
+            sentinel.remove();
+            sentinel = null;
+          }
+        }
+      }
+
+      // Renderiza lote inicial (8 fotos)
+      renderBatch();
+
+      // Se houver mais fotos, configura IntersectionObserver com o contêiner de rolagem correto (.cat-modal-wrapper)
+      if (renderedCount < items.length) {
+        sentinel = document.createElement('div');
+        sentinel.className = 'cat-modal-sentinel';
+        sentinel.style.cssText = 'height: 40px; width: 100%; column-span: all; pointer-events: none;';
+        photosList.appendChild(sentinel);
+
+        if ('IntersectionObserver' in window && wrapper) {
+          catObserver = new IntersectionObserver((entries) => {
+            if (entries[0].isIntersecting) {
+              renderBatch();
+            }
+          }, {
+            root: wrapper,
+            rootMargin: '250px'
+          });
+          catObserver.observe(sentinel);
+        } else {
+          while (renderedCount < items.length) {
+            renderBatch();
+          }
+        }
+      }
     }
   }
 
   catModal.showModal();
   document.body.style.overflow = 'hidden';
 
-  // Reseta scroll do modal para o topo
-  const wrapper = catModal.querySelector('.cat-modal-wrapper');
   if (wrapper) wrapper.scrollTop = 0;
 }
 
 function closeCategoryModal() {
   if (!catModal || !catModal.open) return;
+  if (catObserver) {
+    catObserver.disconnect();
+    catObserver = null;
+  }
+  const photosList = $('#cat-modal-photos-list');
+  if (photosList) photosList.innerHTML = '';
   catModal.close();
   document.body.style.overflow = '';
   if (catLastFocused && typeof catLastFocused.focus === 'function') {

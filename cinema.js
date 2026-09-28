@@ -51,7 +51,7 @@
       if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); goTo(i); }
     });
     const video = videos[i];
-    video.preload = i === 0 ? 'metadata' : 'none';
+    video.preload = 'none';
     video.muted = true;
     video.playsInline = true;
     video.addEventListener('loadedmetadata', schedule);
@@ -252,6 +252,17 @@
     videos.forEach(video => video.pause());
     measure();
   });
+  if ('IntersectionObserver' in window) {
+    const sectionObserver = new IntersectionObserver(entries => {
+      const isVisible = entries[0].isIntersecting;
+      if (!isVisible) {
+        videos.forEach(v => { if (!v.paused) v.pause(); });
+      } else {
+        schedule();
+      }
+    }, { threshold: 0 });
+    sectionObserver.observe(section);
+  }
   window.addEventListener('load', measure, {once: true});
   if (document.fonts) document.fonts.ready.then(measure);
   measure();

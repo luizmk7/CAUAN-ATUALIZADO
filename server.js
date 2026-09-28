@@ -3,6 +3,8 @@ import path from 'path';
 import fs from 'fs';
 import { fileURLToPath } from 'url';
 
+import compression from 'compression';
+
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
@@ -11,8 +13,28 @@ const portArg = process.argv.indexOf('--port');
 const PORT = Number(portArg >= 0 ? process.argv[portArg + 1] : process.env.PORT || 3000);
 const HOST = '0.0.0.0';
 
-// Serve static files from root directory
-app.use(express.static(__dirname));
+// Enable Gzip/Brotli compression for all textual assets
+app.use(compression({
+  filter: (req, res) => {
+    if (req.headers['x-no-compression']) return false;
+    return compression.filter(req, res);
+  },
+  threshold: 1024
+}));
+
+// Serve static files from root directory with smart cache-control headers
+app.use(express.static(__dirname, {
+  maxAge: '1d',
+  setHeaders: (res, filePath) => {
+    if (filePath.endsWith('.html')) {
+      // HTML is never cached aggressively to ensure updates take effect immediately
+      res.setHeader('Cache-Control', 'public, max-age=0, must-revalidate');
+    } else if (filePath.match(/\.(css|js|svg|webp|png|jpg|jpeg|woff2)$/)) {
+      // Static assets are cached for 1 day without immutable flag (safe for updates)
+      res.setHeader('Cache-Control', 'public, max-age=86400');
+    }
+  }
+}));
 
 // Graceful fallback for missing assets in assets/
 app.get('/assets/:filename', (req, res, next) => {

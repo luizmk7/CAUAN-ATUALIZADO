@@ -9,6 +9,8 @@
   <meta property="og:description" content="Vídeos e fotografias criados para transformar marcas, histórias e momentos em imagens que permanecem.">
   <meta name="theme-color" content="#f7f8fa">
   <link rel="icon" href="favicon.svg">
+  <link rel="preconnect" href="https://res.cloudinary.com" crossorigin>
+  <link rel="dns-prefetch" href="https://res.cloudinary.com">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Manrope:wght@600;700;800&display=swap" rel="stylesheet">
@@ -98,7 +100,16 @@
           </div>
 
           <div class="hero-photo-container">
-            <img src="https://res.cloudinary.com/lvl0nq3r/image/upload/v1789787474/imagem_3_lobboe.webp" alt="Cauan, videomaker e fotógrafo profissional com câmera" class="hero-portrait-cutout" fetchpriority="high">
+            <img src="https://res.cloudinary.com/lvl0nq3r/image/upload/f_auto,q_auto,c_limit,w_850/v1789787474/imagem_3_lobboe.webp"
+                 srcset="https://res.cloudinary.com/lvl0nq3r/image/upload/f_auto,q_auto,c_limit,w_500/v1789787474/imagem_3_lobboe.webp 500w,
+                         https://res.cloudinary.com/lvl0nq3r/image/upload/f_auto,q_auto,c_limit,w_850/v1789787474/imagem_3_lobboe.webp 850w,
+                         https://res.cloudinary.com/lvl0nq3r/image/upload/f_auto,q_auto,c_limit,w_1254/v1789787474/imagem_3_lobboe.webp 1254w"
+                 sizes="(max-width: 640px) 380px, (max-width: 1024px) 500px, 680px"
+                 width="1254" height="1254"
+                 alt="Cauan, videomaker e fotógrafo profissional com câmera"
+                 class="hero-portrait-cutout"
+                 fetchpriority="high"
+                 decoding="async">
           </div>
 
           <div class="hero-glass-card">
@@ -225,7 +236,12 @@
       <div class="category-showcase category-cards-grid">
         <article class="work-card glass-card-light" data-title="A Conquista do Diploma" data-category="Formatura" data-media-type="photo" data-image="https://res.cloudinary.com/lvl0nq3r/image/upload/v1790119535/99051_heif_syorwn.webp" data-caption="O sorriso radiante que celebra anos de dedicação e o início de um novo ciclo profissional.">
           <div class="work-media-container">
-            <img src="https://res.cloudinary.com/lvl0nq3r/image/upload/v1790119535/99051_heif_syorwn.webp" alt="Formanda com beca preta segurando capelo" loading="eager" decoding="async" referrerpolicy="no-referrer">
+            <img src="https://res.cloudinary.com/lvl0nq3r/image/upload/f_auto,q_auto,c_limit,w_650/v1790119535/99051_heif_syorwn.webp"
+                 srcset="https://res.cloudinary.com/lvl0nq3r/image/upload/f_auto,q_auto,c_limit,w_400/v1790119535/99051_heif_syorwn.webp 400w, https://res.cloudinary.com/lvl0nq3r/image/upload/f_auto,q_auto,c_limit,w_650/v1790119535/99051_heif_syorwn.webp 650w, https://res.cloudinary.com/lvl0nq3r/image/upload/f_auto,q_auto,c_limit,w_900/v1790119535/99051_heif_syorwn.webp 900w"
+                 sizes="(max-width: 640px) 82vw, (max-width: 1024px) 45vw, 340px"
+                 width="600" height="800"
+                 alt="Formanda com beca preta segurando capelo"
+                 loading="lazy" decoding="async" referrerpolicy="no-referrer">
           </div>
           <div class="work-card-content">
             <span class="work-card-kicker">Colação & Becas</span>
@@ -235,7 +251,12 @@
         </article>
         <article class="work-card glass-card-light" data-title="Sorrisos na Graduação" data-category="Formatura" data-media-type="photo" data-image="https://res.cloudinary.com/lvl0nq3r/image/upload/v1790119532/99043_heif_hnjw4l.webp" data-caption="O sorriso radiante que marca a celebração e a vitória de um grande ciclo concluído.">
           <div class="work-media-container">
-            <img src="https://res.cloudinary.com/lvl0nq3r/image/upload/v1790119532/99043_heif_hnjw4l.webp" alt="Formanda sorrindo com beca e capelo" loading="lazy" decoding="async" referrerpolicy="no-referrer">
+            <img src="https://res.cloudinary.com/lvl0nq3r/image/upload/f_auto,q_auto,c_limit,w_650/v1790119532/99043_heif_hnjw4l.webp"
+                 srcset="https://res.cloudinary.com/lvl0nq3r/image/upload/f_auto,q_auto,c_limit,w_400/v1790119532/99043_heif_hnjw4l.webp 400w, https://res.cloudinary.com/lvl0nq3r/image/upload/f_auto,q_auto,c_limit,w_650/v1790119532/99043_heif_hnjw4l.webp 650w, https://res.cloudinary.com/lvl0nq3r/image/upload/f_auto,q_auto,c_limit,w_900/v1790119532/99043_heif_hnjw4l.webp 900w"
+                 sizes="(max-width: 640px) 82vw, (max-width: 1024px) 45vw, 340px"
+                 width="600" height="800"
+                 alt="Formanda sorrindo com beca e capelo"
+                 loading="lazy" decoding="async" referrerpolicy="no-referrer">
           </div>
           <div class="work-card-content">
             <span class="work-card-kicker">Luz & Emoção</span>
@@ -245,7 +266,12 @@
         </article>
         <article class="work-card glass-card-light" data-title="A Medicina e o Sonho" data-category="Formatura" data-media-type="photo" data-image="https://res.cloudinary.com/lvl0nq3r/image/upload/v1790119526/99097_heif_zbanw9.webp" data-caption="A celebração de um sonho realizado sob as luzes da vitória acadêmica.">
           <div class="work-media-container">
-            <img src="https://res.cloudinary.com/lvl0nq3r/image/upload/v1790119526/99097_heif_zbanw9.webp" alt="Formandos de Medicina em palco festivo" loading="lazy" decoding="async" referrerpolicy="no-referrer">
+            <img src="https://res.cloudinary.com/lvl0nq3r/image/upload/f_auto,q_auto,c_limit,w_650/v1790119526/99097_heif_zbanw9.webp"
+                 srcset="https://res.cloudinary.com/lvl0nq3r/image/upload/f_auto,q_auto,c_limit,w_400/v1790119526/99097_heif_zbanw9.webp 400w, https://res.cloudinary.com/lvl0nq3r/image/upload/f_auto,q_auto,c_limit,w_650/v1790119526/99097_heif_zbanw9.webp 650w, https://res.cloudinary.com/lvl0nq3r/image/upload/f_auto,q_auto,c_limit,w_900/v1790119526/99097_heif_zbanw9.webp 900w"
+                 sizes="(max-width: 640px) 82vw, (max-width: 1024px) 45vw, 340px"
+                 width="600" height="800"
+                 alt="Formandos de Medicina em palco festivo"
+                 loading="lazy" decoding="async" referrerpolicy="no-referrer">
           </div>
           <div class="work-card-content">
             <span class="work-card-kicker">Palco & Vitória</span>
@@ -256,7 +282,10 @@
         <!-- Card 4: Saber Mais / Galeria Formaturas -->
         <article class="work-card work-card-explore glass-card-light" data-open-gallery="formaturas" role="button" tabindex="0" aria-label="Abrir galeria completa com mais fotos de Formaturas">
           <div class="work-media-container">
-            <img src="https://res.cloudinary.com/lvl0nq3r/image/upload/v1790119524/99096_heif_o0pykd.webp" alt="Mais fotos de Formaturas" loading="lazy" decoding="async" referrerpolicy="no-referrer">
+            <img src="https://res.cloudinary.com/lvl0nq3r/image/upload/f_auto,q_auto,c_limit,w_400/v1790119524/99096_heif_o0pykd.webp"
+                 width="600" height="800"
+                 alt="Mais fotos de Formaturas"
+                 loading="lazy" decoding="async" referrerpolicy="no-referrer">
           </div>
           <div class="work-card-content">
             <h3 class="work-card-title">Ver mais fotos <svg class="ui-arrow" viewBox="0 0 10 10" width="10" height="10" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 8L8 2M8 2H3.5M8 2V6.5"/></svg></h3>
@@ -303,7 +332,12 @@
       <div class="category-showcase category-cards-grid">
         <article class="work-card work-card-dark" data-title="Brilho e Elegância Solene" data-category="Evento" data-media-type="photo" data-image="https://res.cloudinary.com/lvl0nq3r/image/upload/v1790119532/99044_heif_xotvpk.webp" data-caption="Um sorriso radiante que ilumina a noite em uma celebração repleta de sofisticação.">
           <div class="work-media-container">
-            <img src="https://res.cloudinary.com/lvl0nq3r/image/upload/v1790119532/99044_heif_xotvpk.webp" alt="Retrato de mulher elegante em vestido verde de gala" loading="eager" decoding="async" referrerpolicy="no-referrer">
+            <img src="https://res.cloudinary.com/lvl0nq3r/image/upload/f_auto,q_auto,c_limit,w_650/v1790119532/99044_heif_xotvpk.webp"
+                 srcset="https://res.cloudinary.com/lvl0nq3r/image/upload/f_auto,q_auto,c_limit,w_400/v1790119532/99044_heif_xotvpk.webp 400w, https://res.cloudinary.com/lvl0nq3r/image/upload/f_auto,q_auto,c_limit,w_650/v1790119532/99044_heif_xotvpk.webp 650w, https://res.cloudinary.com/lvl0nq3r/image/upload/f_auto,q_auto,c_limit,w_900/v1790119532/99044_heif_xotvpk.webp 900w"
+                 sizes="(max-width: 640px) 82vw, (max-width: 1024px) 45vw, 340px"
+                 width="600" height="800"
+                 alt="Retrato de mulher elegante em vestido verde de gala"
+                 loading="lazy" decoding="async" referrerpolicy="no-referrer">
           </div>
           <div class="work-card-content">
             <span class="work-card-kicker kicker-dark">Luzes & Gala</span>
@@ -313,7 +347,12 @@
         </article>
         <article class="work-card work-card-dark" data-title="Retratos em Festa" data-category="Evento" data-media-type="photo" data-image="https://res.cloudinary.com/lvl0nq3r/image/upload/v1790119524/99095_heif_y7rrkz.webp" data-caption="A leveza e a alegria eternizadas em um momento especial de celebração.">
           <div class="work-media-container">
-            <img src="https://res.cloudinary.com/lvl0nq3r/image/upload/v1790119524/99095_heif_y7rrkz.webp" alt="Jovem mulher sorridente em festa social" loading="lazy" decoding="async" referrerpolicy="no-referrer">
+            <img src="https://res.cloudinary.com/lvl0nq3r/image/upload/f_auto,q_auto,c_limit,w_650/v1790119524/99095_heif_y7rrkz.webp"
+                 srcset="https://res.cloudinary.com/lvl0nq3r/image/upload/f_auto,q_auto,c_limit,w_400/v1790119524/99095_heif_y7rrkz.webp 400w, https://res.cloudinary.com/lvl0nq3r/image/upload/f_auto,q_auto,c_limit,w_650/v1790119524/99095_heif_y7rrkz.webp 650w, https://res.cloudinary.com/lvl0nq3r/image/upload/f_auto,q_auto,c_limit,w_900/v1790119524/99095_heif_y7rrkz.webp 900w"
+                 sizes="(max-width: 640px) 82vw, (max-width: 1024px) 45vw, 340px"
+                 width="600" height="800"
+                 alt="Jovem mulher sorridente em festa social"
+                 loading="lazy" decoding="async" referrerpolicy="no-referrer">
           </div>
           <div class="work-card-content">
             <span class="work-card-kicker kicker-dark">Eventos & Conexão</span>
@@ -323,7 +362,12 @@
         </article>
         <article class="work-card work-card-dark" data-title="Celebração em Movimento" data-category="Evento" data-media-type="photo" data-image="https://res.cloudinary.com/lvl0nq3r/image/upload/v1790119520/99088_heif_qbzo0a.webp" data-caption="A sintonia perfeita e a alegria capturadas em um brinde inesquecível.">
           <div class="work-media-container">
-            <img src="https://res.cloudinary.com/lvl0nq3r/image/upload/v1790119520/99088_heif_qbzo0a.webp" alt="Convidadas brindando com taças iluminadas" loading="lazy" decoding="async" referrerpolicy="no-referrer">
+            <img src="https://res.cloudinary.com/lvl0nq3r/image/upload/f_auto,q_auto,c_limit,w_650/v1790119520/99088_heif_qbzo0a.webp"
+                 srcset="https://res.cloudinary.com/lvl0nq3r/image/upload/f_auto,q_auto,c_limit,w_400/v1790119520/99088_heif_qbzo0a.webp 400w, https://res.cloudinary.com/lvl0nq3r/image/upload/f_auto,q_auto,c_limit,w_650/v1790119520/99088_heif_qbzo0a.webp 650w, https://res.cloudinary.com/lvl0nq3r/image/upload/f_auto,q_auto,c_limit,w_900/v1790119520/99088_heif_qbzo0a.webp 900w"
+                 sizes="(max-width: 640px) 82vw, (max-width: 1024px) 45vw, 340px"
+                 width="600" height="800"
+                 alt="Convidadas brindando com taças iluminadas"
+                 loading="lazy" decoding="async" referrerpolicy="no-referrer">
           </div>
           <div class="work-card-content">
             <span class="work-card-kicker kicker-dark">Taças & Brilho</span>
@@ -334,7 +378,10 @@
         <!-- Card 4: Saber Mais / Galeria Eventos -->
         <article class="work-card work-card-explore work-card-dark" data-open-gallery="eventos" role="button" tabindex="0" aria-label="Abrir galeria completa com mais fotos de Eventos">
           <div class="work-media-container">
-            <img src="https://res.cloudinary.com/lvl0nq3r/image/upload/v1790119516/99085_heif_nc0k1a.webp" alt="Mais fotos de Eventos" loading="lazy" decoding="async" referrerpolicy="no-referrer">
+            <img src="https://res.cloudinary.com/lvl0nq3r/image/upload/f_auto,q_auto,c_limit,w_400/v1790119516/99085_heif_nc0k1a.webp"
+                 width="600" height="800"
+                 alt="Mais fotos de Eventos"
+                 loading="lazy" decoding="async" referrerpolicy="no-referrer">
           </div>
           <div class="work-card-content">
             <h3 class="work-card-title title-dark">Ver mais fotos <svg class="ui-arrow" viewBox="0 0 10 10" width="10" height="10" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 8L8 2M8 2H3.5M8 2V6.5"/></svg></h3>
@@ -381,7 +428,12 @@
       <div class="category-showcase category-cards-grid">
         <article class="work-card glass-card-light" data-title="Instantes Reais da Vida" data-category="Aniversário" data-media-type="photo" data-image="https://res.cloudinary.com/lvl0nq3r/image/upload/v1790553245/4A0E2A00-3C2A-4EDD-BA7C-5AEF0D06C047_ccdprm.webp" data-caption="Acompanhamento acolhedor no ritmo natural de cada celebração.">
           <div class="work-media-container">
-            <img src="https://res.cloudinary.com/lvl0nq3r/image/upload/v1790553245/4A0E2A00-3C2A-4EDD-BA7C-5AEF0D06C047_ccdprm.webp" alt="Celebração de aniversário em família" loading="lazy" decoding="async" referrerpolicy="no-referrer">
+            <img src="https://res.cloudinary.com/lvl0nq3r/image/upload/f_auto,q_auto,c_limit,w_650/v1790553245/4A0E2A00-3C2A-4EDD-BA7C-5AEF0D06C047_ccdprm.webp"
+                 srcset="https://res.cloudinary.com/lvl0nq3r/image/upload/f_auto,q_auto,c_limit,w_400/v1790553245/4A0E2A00-3C2A-4EDD-BA7C-5AEF0D06C047_ccdprm.webp 400w, https://res.cloudinary.com/lvl0nq3r/image/upload/f_auto,q_auto,c_limit,w_650/v1790553245/4A0E2A00-3C2A-4EDD-BA7C-5AEF0D06C047_ccdprm.webp 650w, https://res.cloudinary.com/lvl0nq3r/image/upload/f_auto,q_auto,c_limit,w_900/v1790553245/4A0E2A00-3C2A-4EDD-BA7C-5AEF0D06C047_ccdprm.webp 900w"
+                 sizes="(max-width: 640px) 82vw, (max-width: 1024px) 45vw, 340px"
+                 width="600" height="800"
+                 alt="Celebração de aniversário em família"
+                 loading="lazy" decoding="async" referrerpolicy="no-referrer">
           </div>
           <div class="work-card-content">
             <span class="work-card-kicker">Comemorações & Família</span>
@@ -392,7 +444,12 @@
 
         <article class="work-card glass-card-light" data-title="O Brinde aos Novos Ciclos" data-category="Aniversário" data-media-type="photo" data-image="https://res.cloudinary.com/lvl0nq3r/image/upload/v1790553243/7AEA2290-2845-451F-82F2-4CF3BDDA18D1_ocgqh7.webp" data-caption="A alegria espontânea ao redor das pessoas que mais importam.">
           <div class="work-media-container">
-            <img src="https://res.cloudinary.com/lvl0nq3r/image/upload/v1790553243/7AEA2290-2845-451F-82F2-4CF3BDDA18D1_ocgqh7.webp" alt="Brinde com amigos em aniversário" loading="lazy" decoding="async" referrerpolicy="no-referrer">
+            <img src="https://res.cloudinary.com/lvl0nq3r/image/upload/f_auto,q_auto,c_limit,w_650/v1790553243/7AEA2290-2845-451F-82F2-4CF3BDDA18D1_ocgqh7.webp"
+                 srcset="https://res.cloudinary.com/lvl0nq3r/image/upload/f_auto,q_auto,c_limit,w_400/v1790553243/7AEA2290-2845-451F-82F2-4CF3BDDA18D1_ocgqh7.webp 400w, https://res.cloudinary.com/lvl0nq3r/image/upload/f_auto,q_auto,c_limit,w_650/v1790553243/7AEA2290-2845-451F-82F2-4CF3BDDA18D1_ocgqh7.webp 650w, https://res.cloudinary.com/lvl0nq3r/image/upload/f_auto,q_auto,c_limit,w_900/v1790553243/7AEA2290-2845-451F-82F2-4CF3BDDA18D1_ocgqh7.webp 900w"
+                 sizes="(max-width: 640px) 82vw, (max-width: 1024px) 45vw, 340px"
+                 width="600" height="800"
+                 alt="Brinde com amigos em aniversário"
+                 loading="lazy" decoding="async" referrerpolicy="no-referrer">
           </div>
           <div class="work-card-content">
             <span class="work-card-kicker">Amigos & Encontros</span>
@@ -403,7 +460,12 @@
 
         <article class="work-card glass-card-light" data-title="Memórias nos Detalhes" data-category="Aniversário" data-media-type="photo" data-image="https://res.cloudinary.com/lvl0nq3r/image/upload/v1790553243/4F5B7DF5-ABD0-4377-BCE7-0C351C5B0143_i0hm6o.webp" data-caption="Cada elemento planejado para a festa registrado com sensibilidade.">
           <div class="work-media-container">
-            <img src="https://res.cloudinary.com/lvl0nq3r/image/upload/v1790553243/4F5B7DF5-ABD0-4377-BCE7-0C351C5B0143_i0hm6o.webp" alt="Detalhes da decoração e festa de aniversário" loading="lazy" decoding="async" referrerpolicy="no-referrer">
+            <img src="https://res.cloudinary.com/lvl0nq3r/image/upload/f_auto,q_auto,c_limit,w_650/v1790553243/4F5B7DF5-ABD0-4377-BCE7-0C351C5B0143_i0hm6o.webp"
+                 srcset="https://res.cloudinary.com/lvl0nq3r/image/upload/f_auto,q_auto,c_limit,w_400/v1790553243/4F5B7DF5-ABD0-4377-BCE7-0C351C5B0143_i0hm6o.webp 400w, https://res.cloudinary.com/lvl0nq3r/image/upload/f_auto,q_auto,c_limit,w_650/v1790553243/4F5B7DF5-ABD0-4377-BCE7-0C351C5B0143_i0hm6o.webp 650w, https://res.cloudinary.com/lvl0nq3r/image/upload/f_auto,q_auto,c_limit,w_900/v1790553243/4F5B7DF5-ABD0-4377-BCE7-0C351C5B0143_i0hm6o.webp 900w"
+                 sizes="(max-width: 640px) 82vw, (max-width: 1024px) 45vw, 340px"
+                 width="600" height="800"
+                 alt="Detalhes da decoração e festa de aniversário"
+                 loading="lazy" decoding="async" referrerpolicy="no-referrer">
           </div>
           <div class="work-card-content">
             <span class="work-card-kicker">Cenografia & Afeto</span>
@@ -415,7 +477,10 @@
         <!-- Card Saber Mais / Galeria Aniversários -->
         <article class="work-card work-card-explore glass-card-light" data-open-gallery="aniversarios" role="button" tabindex="0" aria-label="Abrir galeria completa com mais fotos de Aniversários">
           <div class="work-media-container">
-            <img src="https://res.cloudinary.com/lvl0nq3r/image/upload/v1790553241/28E3F31F-11B7-4E30-AA08-9BAC65BB1A14_f8kt5m.webp" alt="Mais fotos de Aniversários" loading="lazy" decoding="async" referrerpolicy="no-referrer">
+            <img src="https://res.cloudinary.com/lvl0nq3r/image/upload/f_auto,q_auto,c_limit,w_400/v1790553241/28E3F31F-11B7-4E30-AA08-9BAC65BB1A14_f8kt5m.webp"
+                 width="600" height="800"
+                 alt="Mais fotos de Aniversários"
+                 loading="lazy" decoding="async" referrerpolicy="no-referrer">
           </div>
           <div class="work-card-content">
             <h3 class="work-card-title">Ver mais fotos <svg class="ui-arrow" viewBox="0 0 10 10" width="10" height="10" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 8L8 2M8 2H3.5M8 2V6.5"/></svg></h3>
@@ -462,7 +527,12 @@
       <div class="category-showcase category-cards-grid">
         <article class="work-card work-card-dark" data-title="Caminho Lado a Lado" data-category="Casamento" data-media-type="photo" data-image="https://res.cloudinary.com/lvl0nq3r/image/upload/v1790119535/99050_heif_xnd6g1.webp" data-caption="A cumplicidade refletida em cada olhar no primeiro passeio como recém-casados.">
           <div class="work-media-container">
-            <img src="https://res.cloudinary.com/lvl0nq3r/image/upload/v1790119535/99050_heif_xnd6g1.webp" alt="Casal de noivos caminhando de mãos dadas" loading="eager" decoding="async" referrerpolicy="no-referrer">
+            <img src="https://res.cloudinary.com/lvl0nq3r/image/upload/f_auto,q_auto,c_limit,w_650/v1790119535/99050_heif_xnd6g1.webp"
+                 srcset="https://res.cloudinary.com/lvl0nq3r/image/upload/f_auto,q_auto,c_limit,w_400/v1790119535/99050_heif_xnd6g1.webp 400w, https://res.cloudinary.com/lvl0nq3r/image/upload/f_auto,q_auto,c_limit,w_650/v1790119535/99050_heif_xnd6g1.webp 650w, https://res.cloudinary.com/lvl0nq3r/image/upload/f_auto,q_auto,c_limit,w_900/v1790119535/99050_heif_xnd6g1.webp 900w"
+                 sizes="(max-width: 640px) 82vw, (max-width: 1024px) 45vw, 340px"
+                 width="600" height="800"
+                 alt="Casal de noivos caminhando de mãos dadas"
+                 loading="lazy" decoding="async" referrerpolicy="no-referrer">
           </div>
           <div class="work-card-content">
             <span class="work-card-kicker kicker-dark">Primeiros Passos</span>
@@ -472,7 +542,12 @@
         </article>
         <article class="work-card work-card-dark" data-title="Passos Rumo ao Altar" data-category="Casamento" data-media-type="photo" data-image="https://res.cloudinary.com/lvl0nq3r/image/upload/v1790119534/99045_heif_zhikee.webp" data-caption="A poesia de um novo começo capturada na luz serena do altar.">
           <div class="work-media-container">
-            <img src="https://res.cloudinary.com/lvl0nq3r/image/upload/v1790119534/99045_heif_zhikee.webp" alt="Noivos de costas caminhando para a cerimônia" loading="lazy" decoding="async" referrerpolicy="no-referrer">
+            <img src="https://res.cloudinary.com/lvl0nq3r/image/upload/f_auto,q_auto,c_limit,w_650/v1790119534/99045_heif_zhikee.webp"
+                 srcset="https://res.cloudinary.com/lvl0nq3r/image/upload/f_auto,q_auto,c_limit,w_400/v1790119534/99045_heif_zhikee.webp 400w, https://res.cloudinary.com/lvl0nq3r/image/upload/f_auto,q_auto,c_limit,w_650/v1790119534/99045_heif_zhikee.webp 650w, https://res.cloudinary.com/lvl0nq3r/image/upload/f_auto,q_auto,c_limit,w_900/v1790119534/99045_heif_zhikee.webp 900w"
+                 sizes="(max-width: 640px) 82vw, (max-width: 1024px) 45vw, 340px"
+                 width="600" height="800"
+                 alt="Noivos de costas caminhando para a cerimônia"
+                 loading="lazy" decoding="async" referrerpolicy="no-referrer">
           </div>
           <div class="work-card-content">
             <span class="work-card-kicker kicker-dark">A Poesia do Início</span>
@@ -482,7 +557,12 @@
         </article>
         <article class="work-card work-card-dark" data-title="O Preparo da Noiva" data-category="Casamento" data-media-type="photo" data-image="https://res.cloudinary.com/lvl0nq3r/image/upload/v1790119534/99046_heif_e3zhvp.webp" data-caption="Cada pequeno detalhe do preparo carrega a expectativa e a magia do grande dia.">
           <div class="work-media-container">
-            <img src="https://res.cloudinary.com/lvl0nq3r/image/upload/v1790119534/99046_heif_e3zhvp.webp" alt="Noiva com vestido de noiva em preparação" loading="lazy" decoding="async" referrerpolicy="no-referrer">
+            <img src="https://res.cloudinary.com/lvl0nq3r/image/upload/f_auto,q_auto,c_limit,w_650/v1790119534/99046_heif_e3zhvp.webp"
+                 srcset="https://res.cloudinary.com/lvl0nq3r/image/upload/f_auto,q_auto,c_limit,w_400/v1790119534/99046_heif_e3zhvp.webp 400w, https://res.cloudinary.com/lvl0nq3r/image/upload/f_auto,q_auto,c_limit,w_650/v1790119534/99046_heif_e3zhvp.webp 650w, https://res.cloudinary.com/lvl0nq3r/image/upload/f_auto,q_auto,c_limit,w_900/v1790119534/99046_heif_e3zhvp.webp 900w"
+                 sizes="(max-width: 640px) 82vw, (max-width: 1024px) 45vw, 340px"
+                 width="600" height="800"
+                 alt="Noiva com vestido de noiva em preparação"
+                 loading="lazy" decoding="async" referrerpolicy="no-referrer">
           </div>
           <div class="work-card-content">
             <span class="work-card-kicker kicker-dark">Making Of & Afeto</span>
@@ -493,7 +573,10 @@
         <!-- Card 4: Saber Mais / Galeria Casamentos -->
         <article class="work-card work-card-explore work-card-dark" data-open-gallery="casamentos" role="button" tabindex="0" aria-label="Abrir galeria completa com mais fotos de Casamentos">
           <div class="work-media-container">
-            <img src="https://res.cloudinary.com/lvl0nq3r/image/upload/v1790119532/99041_heif_vsro33.webp" alt="Mais fotos de Casamentos" loading="lazy" decoding="async" referrerpolicy="no-referrer">
+            <img src="https://res.cloudinary.com/lvl0nq3r/image/upload/f_auto,q_auto,c_limit,w_400/v1790119532/99041_heif_vsro33.webp"
+                 width="600" height="800"
+                 alt="Mais fotos de Casamentos"
+                 loading="lazy" decoding="async" referrerpolicy="no-referrer">
           </div>
           <div class="work-card-content">
             <h3 class="work-card-title title-dark">Ver mais fotos <svg class="ui-arrow" viewBox="0 0 10 10" width="10" height="10" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 8L8 2M8 2H3.5M8 2V6.5"/></svg></h3>
@@ -553,7 +636,7 @@
               data-caption="Compilação de captação cinematográfica, dinâmica de palco, eventos e marcas por Cauan Videomaker."
               data-video-src="assets/video-showreel-cauan.mp4">
               <div class="cinema-media-shell">
-                <video class="cinema-video" poster="assets/cauan-party-show.webp" loop muted playsinline preload="metadata">
+                <video class="cinema-video" poster="assets/cauan-party-show.webp" loop muted playsinline preload="none">
                   <source src="assets/video-showreel-cauan.mp4" type="video/mp4">
                   Seu navegador não suporta vídeos HTML5.
                 </video>
@@ -573,7 +656,7 @@
               data-caption="Vídeos verticais de alto engajamento, retenção nos primeiros 3 segundos e ritmo pensado para o Instagram e TikTok."
               data-video-src="assets/video-reels-mobile.mp4">
               <div class="cinema-media-shell">
-                <video class="cinema-video" poster="assets/cauan-bday-brinde.webp" loop muted playsinline preload="metadata">
+                <video class="cinema-video" poster="assets/cauan-bday-brinde.webp" loop muted playsinline preload="none">
                   <source src="assets/video-reels-mobile.mp4" type="video/mp4">
                   Seu navegador não suporta vídeos HTML5.
                 </video>
@@ -593,7 +676,7 @@
               data-caption="Apresentação cinematográfica da infraestrutura, equipe, processos e essência da sua marca com autoridade."
               data-video-src="assets/video-institucional.mp4">
               <div class="cinema-media-shell">
-                <video class="cinema-video" poster="assets/cauan-grad-palco.webp" loop muted playsinline preload="metadata">
+                <video class="cinema-video" poster="assets/cauan-grad-palco.webp" loop muted playsinline preload="none">
                   <source src="assets/video-institucional.mp4" type="video/mp4">
                   Seu navegador não suporta vídeos HTML5.
                 </video>
@@ -613,7 +696,7 @@
               data-caption="A energia real da plateia, iluminação de palco, sincronismo musical perfeito e dinamismo para eventos e festivais."
               data-video-src="assets/video-aftermovie.mp4">
               <div class="cinema-media-shell">
-                <video class="cinema-video" poster="assets/cauan-party-crowd.webp" loop muted playsinline preload="metadata">
+                <video class="cinema-video" poster="assets/cauan-party-crowd.webp" loop muted playsinline preload="none">
                   <source src="assets/video-aftermovie.mp4" type="video/mp4">
                   Seu navegador não suporta vídeos HTML5.
                 </video>
@@ -633,7 +716,7 @@
               data-caption="Iluminação controlada, planos detalhe, texturas e enquadramentos focados em destacar atributos de produtos e serviços."
               data-video-src="assets/video-comercial.mp4">
               <div class="cinema-media-shell">
-                <video class="cinema-video" poster="assets/cauan-wedding-casal.webp" loop muted playsinline preload="metadata">
+                <video class="cinema-video" poster="assets/cauan-wedding-casal.webp" loop muted playsinline preload="none">
                   <source src="assets/video-comercial.mp4" type="video/mp4">
                   Seu navegador não suporta vídeos HTML5.
                 </video>
@@ -945,8 +1028,8 @@
     </div>
   </dialog>
 
-  <script src="data/portfolio-manifest.js"></script>
-  <script src="app.js"></script>
-  <script src="cinema.js"></script>
+  <script src="data/portfolio-manifest.js" defer></script>
+  <script src="app.js" defer></script>
+  <script src="cinema.js" defer></script>
 </body>
 </html>
