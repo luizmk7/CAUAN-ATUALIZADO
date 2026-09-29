@@ -21,41 +21,13 @@
   const lerp = (a, b, t) => a + (b - a) * t;
   const pad = x => String(x).padStart(2, '0');
   const lead = .12, tail = .12, total = lead + cards.length - .2 + tail;
+  const isMobile = () => window.innerWidth <= 768;
+  let mobileScrollTimer = 0;
   let reduced = mq.matches || document.body.classList.contains('paused');
   let active = 0, expansion = 0, pinned = false, soundOn = false;
   let width = 1, height = 1, unit = 1, range = 1, topOffset = 0;
   let frame = 0, lastWidth = 0, lastHeight = 0;
   const manualPause = new Set(), pending = new Set(), blocked = new Set();
-  const noticeEl = byId('reels-scroll-notice');
-  let noticeTimer = null;
-  let noticeShown = false;
-
-  function triggerScrollNotice() {
-    if (!noticeEl || noticeShown || reduced) return;
-    noticeShown = true;
-    noticeEl.classList.remove('is-dismissed');
-    noticeEl.classList.add('is-visible');
-    noticeTimer = setTimeout(() => {
-      dismissScrollNotice();
-    }, 2800);
-  }
-
-  function dismissScrollNotice() {
-    if (!noticeEl) return;
-    if (noticeTimer) {
-      clearTimeout(noticeTimer);
-      noticeTimer = null;
-    }
-    noticeEl.classList.remove('is-visible');
-    noticeEl.classList.add('is-dismissed');
-  }
-
-  if (noticeEl) {
-    noticeEl.addEventListener('click', () => {
-      dismissScrollNotice();
-      goTo(Math.min(active + 1, cards.length - 1));
-    });
-  }
   const meter = document.createElement('div');
   meter.className = 'cinema-position';
   meter.setAttribute('aria-hidden', 'true');
@@ -175,7 +147,7 @@
     });
   }
   function isStageInView() {
-    if (reduced) {
+    if (isMobile() || reduced) {
       const sRect = section.getBoundingClientRect();
       return sRect.bottom > 80 && sRect.top < window.innerHeight - 80;
     }
@@ -212,7 +184,65 @@
       updateControls();
     }
   }
+  function updateMobileActive() {
+    if (!isMobile()) return;
+    const vpRect = viewport.getBoundingClientRect();
+    const centerX = vpRect.left + vpRect.width / 2;
+    let closestIndex = active;
+    let minDiff = Infinity;
+    cards.forEach((card, i) => {
+      const cRect = card.getBoundingClientRect();
+      const cardCenter = cRect.left + cRect.width / 2;
+      const diff = Math.abs(cardCenter - centerX);
+      if (diff < minDiff) {
+        minDiff = diff;
+        closestIndex = i;
+      }
+    });
+    if (closestIndex !== active) {
+      active = closestIndex;
+      title.textContent = cards[active].dataset.title;
+      if (tag) tag.textContent = cards[active].dataset.category;
+      counter.textContent = `${pad(active + 1)} / ${pad(cards.length)}`;
+      [...nav.children].forEach((button, i) => button.setAttribute('aria-current', String(i === active)));
+      if (isStageInView() && !document.hidden && !manualPause.has(active)) {
+        videos.forEach((v, i) => {
+          if (i !== active) {
+            if (!v.paused) v.pause();
+            v.muted = true;
+          }
+        });
+        startVideo(active);
+      }
+      updateControls();
+    }
+  }
+  viewport.addEventListener('scroll', () => {
+    if (!isMobile()) return;
+    cancelAnimationFrame(mobileScrollTimer);
+    mobileScrollTimer = requestAnimationFrame(updateMobileActive);
+  }, { passive: true });
   function measure() {
+    const mobile = isMobile();
+    section.classList.toggle('cinema-mobile-mode', mobile);
+    if (mobile) {
+      section.style.height = 'auto';
+      section.style.removeProperty('--cinema-top');
+      section.style.removeProperty('--cinema-height');
+      cards.forEach((card, i) => {
+        card.removeAttribute('style');
+        card.tabIndex = 0;
+      });
+      videos.forEach(video => { video.controls = false; });
+      lastWidth = innerWidth;
+      lastHeight = innerHeight;
+      title.textContent = cards[active].dataset.title;
+      if (tag) tag.textContent = cards[active].dataset.category;
+      counter.textContent = `${pad(active + 1)} / ${pad(cards.length)}`;
+      [...nav.children].forEach((button, i) => button.setAttribute('aria-current', String(i === active)));
+      updateMobileActive();
+      return;
+    }
     const header = document.querySelector('.site-header');
     topOffset = header && getComputedStyle(header).position === 'fixed' ? Math.ceil(header.getBoundingClientRect().height) : 0;
     const visibleH = window.innerHeight;
@@ -232,6 +262,7 @@
   }
   function render() {
     frame = 0;
+    if (isMobile()) return;
     if (reduced) {
       cards.forEach(card => { card.removeAttribute('style'); card.tabIndex = -1; card.removeAttribute('role'); });
       progress.style.transform = 'scaleX(0)';
@@ -297,21 +328,25 @@
     if (tag) tag.textContent = cards[active].dataset.category;
     [...nav.children].forEach((button, i) => button.setAttribute('aria-current', String(i === active)));
     progress.style.transform = `scaleX(${clamp(amount / total)})`;
-    if (stageVisible && scroll >= -30 && scroll <= range * 0.35) {
-      triggerScrollNotice();
-    }
-    if (amount > lead + 0.35 || scroll > range * 0.6) {
-      dismissScrollNotice();
-    }
-    if (scroll < -200) {
-      noticeShown = false;
-      if (noticeEl) noticeEl.classList.remove('is-visible', 'is-dismissed');
-    }
     updateControls();
   }
   function schedule() { if (!frame) frame = requestAnimationFrame(render); }
   function goTo(index) {
     manualPause.delete(index);
+    if (isMobile()) {
+      const card = cards[index];
+      if (card) {
+        const left = card.offsetLeft - (viewport.clientWidth - card.clientWidth) / 2;
+        viewport.scrollTo({ left, behavior: 'smooth' });
+      }
+      active = index;
+      title.textContent = cards[active].dataset.title;
+      if (tag) tag.textContent = cards[active].dataset.category;
+      counter.textContent = `${pad(active + 1)} / ${pad(cards.length)}`;
+      [...nav.children].forEach((button, i) => button.setAttribute('aria-current', String(i === active)));
+      setTimeout(() => startVideo(index), 150);
+      return;
+    }
     if (reduced) { videos[index].focus(); return; }
     const top = section.getBoundingClientRect().top + scrollY - topOffset;
     scrollTo({top: top + (lead + index + .4) * unit, behavior: 'smooth'});
@@ -397,7 +432,6 @@
           v.muted = true;
         });
         updateControls();
-        dismissScrollNotice();
       } else {
         schedule();
       }
