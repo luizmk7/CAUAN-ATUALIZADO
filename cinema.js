@@ -144,17 +144,32 @@
       }
     });
   }
+  function isStageInView() {
+    if (reduced) {
+      const sRect = section.getBoundingClientRect();
+      return sRect.bottom > 80 && sRect.top < window.innerHeight - 80;
+    }
+    const sRect = stage.getBoundingClientRect();
+    return sRect.bottom > (topOffset + 30) && sRect.top < (window.innerHeight - 30);
+  }
   function startVideo(index) {
     const video = videos[index];
-    if (!video || !video.paused || pending.has(index)) return;
+    if (!video) return;
+    if (!isStageInView() || manualPause.has(index) || document.hidden) {
+      if (!video.paused) video.pause();
+      video.muted = true;
+      return;
+    }
+    if (!video.paused || pending.has(index)) return;
     pending.add(index);
     video.muted = !soundOn;
     video.defaultMuted = true;
     const playPromise = video.play();
     if (playPromise && typeof playPromise.then === 'function') {
       playPromise.then(() => {
-        if (active !== index || document.hidden || manualPause.has(index)) {
+        if (active !== index || document.hidden || manualPause.has(index) || !isStageInView()) {
           video.pause();
+          video.muted = true;
         }
       }).catch(err => {
         console.warn('Play notice:', err && err.name);
@@ -237,10 +252,13 @@
       card.style.pointerEvents = distance > 1.1 || (expansion > .5 && i !== index) ? 'none' : 'auto';
       const badge = card.querySelector('.cinema-card-collapsed-badge');
       if (badge) badge.style.opacity = String(1 - smooth(e * 2));
-      const inView = rect.top < window.innerHeight && rect.bottom > 80;
+      const stageVisible = isStageInView();
+      const inView = stageVisible && (reduced || (scroll >= -50 && scroll <= range + 50));
       if (i !== active || !inView || reduced || document.hidden || manualPause.has(i)) {
         if (!video.paused) video.pause();
+        video.muted = true;
       } else {
+        video.muted = !soundOn;
         startVideo(i);
       }
     });
@@ -285,7 +303,10 @@
   if (skip) {
     skip.addEventListener('click', e => {
       e.preventDefault();
-      videos.forEach(video => video.pause());
+      videos.forEach(video => {
+        video.pause();
+        video.muted = true;
+      });
       const next = document.getElementById('formatos');
       if (next) {
         next.tabIndex = -1;
@@ -304,32 +325,48 @@
     if (innerWidth !== lastWidth || Math.abs(innerHeight - lastHeight) > 80) measure();
   });
   document.addEventListener('visibilitychange', () => {
-    if (document.hidden) videos.forEach(video => video.pause());
-    else schedule();
+    if (document.hidden) {
+      videos.forEach(video => {
+        if (!video.paused) video.pause();
+        video.muted = true;
+      });
+    } else schedule();
   });
   window.addEventListener('cauan:motion', e => {
     reduced = e.detail.paused;
-    videos.forEach(video => video.pause());
+    videos.forEach(video => {
+      video.pause();
+      video.muted = true;
+    });
     measure();
   });
   mq.addEventListener('change', e => {
     reduced = e.matches || document.body.classList.contains('paused');
-    videos.forEach(video => video.pause());
+    videos.forEach(video => {
+      video.pause();
+      video.muted = true;
+    });
     measure();
   });
   if ('IntersectionObserver' in window) {
-    const sectionObserver = new IntersectionObserver(entries => {
+    const stageObserver = new IntersectionObserver(entries => {
       const isVisible = entries[0].isIntersecting;
       if (!isVisible) {
-        videos.forEach(v => { if (!v.paused) v.pause(); });
+        videos.forEach(v => {
+          if (!v.paused) v.pause();
+          v.muted = true;
+        });
+        updateControls();
       } else {
         schedule();
       }
-    }, { threshold: 0 });
-    sectionObserver.observe(section);
+    }, { threshold: 0.05 });
+    stageObserver.observe(stage);
   }
   window.addEventListener('load', measure, {once: true});
-  const userGestureUnlock = () => {
+  const userGestureUnlock = (e) => {
+    if (!isStageInView()) return;
+    if (e && e.target && !section.contains(e.target)) return;
     if (!document.hidden && !manualPause.has(active)) {
       const vid = videos[active];
       if (vid && vid.paused) startVideo(active);
