@@ -1980,11 +1980,13 @@ html {
   outline-offset: 4px;
 }
 
-.work-card:hover, 
-.work-card:focus-visible {
-  transform: translateY(-8px) !important;
-  border-color: rgba(255, 255, 255, 0.35) !important;
-  box-shadow: 0 28px 56px -8px rgba(0, 0, 0, 0.58), 0 12px 24px rgba(0, 0, 0, 0.3), 0 0 20px rgba(255, 255, 255, 0.08) !important;
+@media (hover: hover) and (pointer: fine) {
+  .work-card:hover, 
+  .work-card:focus-visible {
+    transform: translateY(-8px) !important;
+    border-color: rgba(255, 255, 255, 0.35) !important;
+    box-shadow: 0 28px 56px -8px rgba(0, 0, 0, 0.58), 0 12px 24px rgba(0, 0, 0, 0.3), 0 0 20px rgba(255, 255, 255, 0.08) !important;
+  }
 }
 
 /* Glass Card em Fundos Claros & Escuros Unificados para Imagem Total */
@@ -2899,8 +2901,11 @@ dialog .close:hover {
   .category-cards-grid {
     display: flex;
     overflow-x: auto;
+    overflow-y: hidden;
+    overflow-y: clip;
     scroll-snap-type: x mandatory;
     -webkit-overflow-scrolling: touch;
+    align-items: stretch;
     gap: 16px;
     padding-bottom: 12px;
     margin-left: -6%;
@@ -2908,6 +2913,8 @@ dialog .close:hover {
     padding-left: 6%;
     padding-right: 14%;
     scrollbar-width: none;
+    overscroll-behavior-y: none;
+    touch-action: pan-x;
   }
 
   .category-cards-grid::-webkit-scrollbar {
@@ -2916,9 +2923,13 @@ dialog .close:hover {
 
   .category-cards-grid .work-card {
     flex: 0 0 82%;
-    min-height: 420px;
-    height: 420px;
+    min-height: 440px;
+    height: 440px;
+    max-height: 440px;
     scroll-snap-align: start;
+    align-self: stretch;
+    transform: none;
+    touch-action: pan-x;
   }
 
   .work-media-container,
@@ -3775,29 +3786,82 @@ dialog .close:hover {
 }
 
 @media (max-width: 800px) {
-  .category-cards-grid {
+  .category-cards-grid,
+  #formaturas .category-cards-grid,
+  #eventos .category-cards-grid,
+  #aniversarios .category-cards-grid,
+  #casamentos .category-cards-grid {
     display: flex !important;
     flex-direction: row !important;
     flex-wrap: nowrap !important;
     overflow-x: auto !important;
+    overflow-y: hidden !important;
+    overflow-y: clip !important;
+    height: 484px !important;
+    min-height: 484px !important;
+    max-height: 484px !important;
     scroll-snap-type: x mandatory !important;
     -webkit-overflow-scrolling: touch !important;
+    align-items: stretch !important;
     gap: 16px !important;
-    padding: 0 5% 8px !important;
+    padding: 8px 5% 16px !important;
     margin: 0 -5% !important;
     scrollbar-width: none !important;
+    overscroll-behavior-y: none !important;
+    overscroll-behavior-x: contain !important;
+    touch-action: pan-x !important;
   }
 
   .category-cards-grid::-webkit-scrollbar {
     display: none !important;
   }
 
-  .category-cards-grid .work-card {
+  .category-cards-grid .work-card,
+  #formaturas .category-cards-grid .work-card,
+  #eventos .category-cards-grid .work-card,
+  #aniversarios .category-cards-grid .work-card,
+  #casamentos .category-cards-grid .work-card {
     flex: 0 0 85% !important;
     max-width: 85% !important;
+    height: 460px !important;
+    min-height: 460px !important;
+    max-height: 460px !important;
     scroll-snap-align: center !important;
     scroll-snap-stop: always !important;
     margin: 0 !important;
+    transform: none !important;
+    align-self: stretch !important;
+    touch-action: pan-x !important;
+    user-select: none !important;
+    -webkit-user-select: none !important;
+    -webkit-user-drag: none !important;
+  }
+
+  .category-cards-grid .work-card img,
+  #formaturas .category-cards-grid .work-card img,
+  #eventos .category-cards-grid .work-card img,
+  #aniversarios .category-cards-grid .work-card img,
+  #casamentos .category-cards-grid .work-card img {
+    pointer-events: none !important;
+    user-select: none !important;
+    -webkit-user-select: none !important;
+    -webkit-user-drag: none !important;
+  }
+
+  .category-cards-grid .work-card:hover,
+  .category-cards-grid .work-card:active,
+  .category-cards-grid .work-card:focus,
+  #formaturas .category-cards-grid .work-card:hover,
+  #eventos .category-cards-grid .work-card:hover,
+  #aniversarios .category-cards-grid .work-card:hover,
+  #casamentos .category-cards-grid .work-card:hover {
+    transform: none !important;
+  }
+
+  html.has-micro-motion .category-cards-grid .work-card.apple-reveal {
+    transform: none !important;
+    opacity: 1 !important;
+    transition: opacity 300ms ease !important;
   }
 
   .carousel-dots {

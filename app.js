@@ -87,10 +87,17 @@ function initAppleMicroMotion() {
     const header = cat.querySelector('.category-block-header');
     if (header) registerReveal(header, 0);
 
-    const cards = cat.querySelectorAll('.category-cards-grid .work-card');
-    cards.forEach((card, idx) => {
-      registerReveal(card, Math.min(idx * 60, 240));
-    });
+    const grid = cat.querySelector('.category-cards-grid');
+    if (grid && window.innerWidth <= 850) {
+      registerReveal(grid, 60);
+      const cards = cat.querySelectorAll('.category-cards-grid .work-card');
+      cards.forEach(card => card.classList.add('is-revealed'));
+    } else {
+      const cards = cat.querySelectorAll('.category-cards-grid .work-card');
+      cards.forEach((card, idx) => {
+        registerReveal(card, Math.min(idx * 60, 240));
+      });
+    }
 
     const footer = cat.querySelector('.category-footer-cta');
     if (footer) registerReveal(footer, 100);
@@ -955,10 +962,10 @@ function initCategoryCarousels() {
     dots.forEach((dot, index) => {
       dot.addEventListener('click', () => {
         if (cards[index]) {
-          cards[index].scrollIntoView({
-            behavior: paused ? 'instant' : 'smooth',
-            block: 'nearest',
-            inline: 'center'
+          const targetLeft = cards[index].offsetLeft - (grid.clientWidth - cards[index].clientWidth) / 2;
+          grid.scrollTo({
+            left: Math.max(0, targetLeft),
+            behavior: paused ? 'auto' : 'smooth'
           });
           updateActiveDot(dots, index);
         }
