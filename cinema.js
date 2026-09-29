@@ -26,6 +26,36 @@
   let width = 1, height = 1, unit = 1, range = 1, topOffset = 0;
   let frame = 0, lastWidth = 0, lastHeight = 0;
   const manualPause = new Set(), pending = new Set(), blocked = new Set();
+  const noticeEl = byId('reels-scroll-notice');
+  let noticeTimer = null;
+  let noticeShown = false;
+
+  function triggerScrollNotice() {
+    if (!noticeEl || noticeShown || reduced) return;
+    noticeShown = true;
+    noticeEl.classList.remove('is-dismissed');
+    noticeEl.classList.add('is-visible');
+    noticeTimer = setTimeout(() => {
+      dismissScrollNotice();
+    }, 2800);
+  }
+
+  function dismissScrollNotice() {
+    if (!noticeEl) return;
+    if (noticeTimer) {
+      clearTimeout(noticeTimer);
+      noticeTimer = null;
+    }
+    noticeEl.classList.remove('is-visible');
+    noticeEl.classList.add('is-dismissed');
+  }
+
+  if (noticeEl) {
+    noticeEl.addEventListener('click', () => {
+      dismissScrollNotice();
+      goTo(Math.min(active + 1, cards.length - 1));
+    });
+  }
   const meter = document.createElement('div');
   meter.className = 'cinema-position';
   meter.setAttribute('aria-hidden', 'true');
@@ -267,6 +297,16 @@
     if (tag) tag.textContent = cards[active].dataset.category;
     [...nav.children].forEach((button, i) => button.setAttribute('aria-current', String(i === active)));
     progress.style.transform = `scaleX(${clamp(amount / total)})`;
+    if (stageVisible && scroll >= -30 && scroll <= range * 0.35) {
+      triggerScrollNotice();
+    }
+    if (amount > lead + 0.35 || scroll > range * 0.6) {
+      dismissScrollNotice();
+    }
+    if (scroll < -200) {
+      noticeShown = false;
+      if (noticeEl) noticeEl.classList.remove('is-visible', 'is-dismissed');
+    }
     updateControls();
   }
   function schedule() { if (!frame) frame = requestAnimationFrame(render); }
@@ -357,6 +397,7 @@
           v.muted = true;
         });
         updateControls();
+        dismissScrollNotice();
       } else {
         schedule();
       }
