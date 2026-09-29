@@ -345,6 +345,9 @@ function openModal(data, triggerEl){
     if(data.link){
       extLink.href=data.link;
       extLink.innerHTML=`Ver este trabalho ${arrowSvg}`;
+    }else if(data.category && (data.category.toLowerCase().includes('aniversár') || data.category.toLowerCase().includes('aniversar'))){
+      extLink.href='https://www.instagram.com/stories/highlights/17908736619199934/';
+      extLink.innerHTML=`Ver mais no Instagram ${arrowSvg}`;
     }else{
       extLink.href='https://www.instagram.com/cauanvideomaker_/';
       extLink.innerHTML=`Ver mais no Instagram ${arrowSvg}`;
@@ -475,19 +478,23 @@ function getCategoryItems(cat) {
 const categoryGalleries = {
   formaturas: {
     title: 'Galeria · Formaturas',
-    whatsappMessage: 'Olá, Cauan! Vi a galeria de Formaturas no site e gostaria de solicitar um orçamento para o meu evento.'
+    whatsappMessage: 'Olá, Cauan! Vi a galeria de Formaturas no site e gostaria de solicitar um orçamento para o meu evento.',
+    instagramUrl: 'https://www.instagram.com/cauanvideomaker_/'
   },
   eventos: {
     title: 'Galeria · Eventos & Shows',
-    whatsappMessage: 'Olá, Cauan! Vi a galeria de Eventos no site e gostaria de solicitar um orçamento para cobertura.'
+    whatsappMessage: 'Olá, Cauan! Vi a galeria de Eventos no site e gostaria de solicitar um orçamento para cobertura.',
+    instagramUrl: 'https://www.instagram.com/cauanvideomaker_/'
   },
   aniversarios: {
     title: 'Galeria · Aniversários',
-    whatsappMessage: 'Olá, Cauan! Vi a galeria de Aniversários no site e gostaria de solicitar um orçamento.'
+    whatsappMessage: 'Olá, Cauan! Vi a galeria de Aniversários no site e gostaria de solicitar um orçamento.',
+    instagramUrl: 'https://www.instagram.com/stories/highlights/17908736619199934/'
   },
   casamentos: {
     title: 'Galeria · Casamentos',
-    whatsappMessage: 'Olá, Cauan! Vi a galeria de Casamentos no site e gostaria de conversar sobre a cobertura da minha data.'
+    whatsappMessage: 'Olá, Cauan! Vi a galeria de Casamentos no site e gostaria de conversar sobre a cobertura da minha data.',
+    instagramUrl: 'https://www.instagram.com/cauanvideomaker_/'
   }
 };
 
@@ -509,7 +516,7 @@ function openCategoryModal(catKey, triggerEl) {
   const wrapper = catModal.querySelector('.cat-modal-wrapper');
 
   if (titleEl) titleEl.textContent = gallery.title;
-  if (instaBtn) instaBtn.href = 'https://www.instagram.com/cauanvideomaker_/';
+  if (instaBtn) instaBtn.href = gallery.instagramUrl || 'https://www.instagram.com/cauanvideomaker_/';
 
   // Desconecta observador prévio para evitar duplicação
   if (catObserver) {
