@@ -21,8 +21,9 @@
   const lerp = (a, b, t) => a + (b - a) * t;
   const pad = x => String(x).padStart(2, '0');
   const lead = .12, tail = .12, total = lead + cards.length - .2 + tail;
-  const isMobile = () => window.innerWidth <= 768;
+  const isMobile = () => window.innerWidth <= 991 || window.matchMedia('(max-width: 991px), (pointer: coarse) and (max-width: 1024px)').matches;
   let mobileScrollTimer = 0;
+  let touchStartX = 0, touchStartY = 0, isDragging = false;
   let reduced = mq.matches || document.body.classList.contains('paused');
   let active = 0, expansion = 0, pinned = false, soundOn = false;
   let width = 1, height = 1, unit = 1, range = 1, topOffset = 0;
@@ -48,7 +49,7 @@
     card.setAttribute('role', 'button');
     card.setAttribute('aria-label', `Ampliar ou reproduzir: ${card.dataset.title}`);
     card.addEventListener('click', e => {
-      if (e.target.closest('video[controls]')) return;
+      if (isDragging || e.target.closest('video[controls]')) return;
       manualPause.delete(i);
       if (active === i) {
         if (video.paused) {
@@ -222,6 +223,35 @@
     cancelAnimationFrame(mobileScrollTimer);
     mobileScrollTimer = requestAnimationFrame(updateMobileActive);
   }, { passive: true });
+  viewport.addEventListener('touchstart', e => {
+    if (!isMobile()) return;
+    touchStartX = e.touches[0].clientX;
+    touchStartY = e.touches[0].clientY;
+    isDragging = false;
+  }, { passive: true });
+  viewport.addEventListener('touchmove', e => {
+    if (!isMobile()) return;
+    const diffX = e.touches[0].clientX - touchStartX;
+    const diffY = e.touches[0].clientY - touchStartY;
+    if (Math.abs(diffX) > 10 && Math.abs(diffX) > Math.abs(diffY)) {
+      isDragging = true;
+    }
+  }, { passive: true });
+  viewport.addEventListener('touchend', e => {
+    if (!isMobile()) return;
+    if (isDragging && e.changedTouches && e.changedTouches[0]) {
+      const touchEndX = e.changedTouches[0].clientX;
+      const deltaX = touchEndX - touchStartX;
+      if (Math.abs(deltaX) > 40) {
+        if (deltaX < 0 && active < cards.length - 1) {
+          goTo(active + 1);
+        } else if (deltaX > 0 && active > 0) {
+          goTo(active - 1);
+        }
+      }
+    }
+    setTimeout(() => { isDragging = false; }, 100);
+  }, { passive: true });
   function measure() {
     const mobile = isMobile();
     section.classList.toggle('cinema-mobile-mode', mobile);
@@ -229,6 +259,9 @@
       section.style.height = 'auto';
       section.style.removeProperty('--cinema-top');
       section.style.removeProperty('--cinema-height');
+      stage.style.position = 'relative';
+      stage.style.top = '0px';
+      stage.style.height = 'auto';
       cards.forEach((card, i) => {
         card.removeAttribute('style');
         card.tabIndex = 0;
@@ -243,6 +276,9 @@
       updateMobileActive();
       return;
     }
+    stage.style.removeProperty('position');
+    stage.style.removeProperty('top');
+    stage.style.removeProperty('height');
     const header = document.querySelector('.site-header');
     topOffset = header && getComputedStyle(header).position === 'fixed' ? Math.ceil(header.getBoundingClientRect().height) : 0;
     const visibleH = window.innerHeight;

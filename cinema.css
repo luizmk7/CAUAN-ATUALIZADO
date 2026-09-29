@@ -53,10 +53,37 @@
 .cinema-position span{display:block;width:100%;height:100%;transform:scaleX(0);transform-origin:left;background:#d5d5d1}
 .cinema-card:focus-visible{outline:2px solid white;outline-offset:5px}
 .gear-stage .gear-visual img{filter:drop-shadow(0 24px 32px #0003);object-fit:contain}
-@media(max-width:768px){
+#servicos.cinema-mobile-mode #cinema-skip-link{display:none!important}
+#servicos.cinema-mobile-mode.cinema-scroll-section,#servicos.cinema-mobile-mode{height:auto!important;padding:28px 0 20px!important}
+#cinema-sticky-stage.cinema-mobile-stage,#servicos.cinema-mobile-mode #cinema-sticky-stage{position:relative!important;top:0!important;height:auto!important;min-height:0!important;display:flex!important;flex-direction:column!important;padding:0 0 10px!important;gap:14px!important}
+#servicos.cinema-mobile-mode .cinema-stage-header{padding:0 5%!important;display:flex!important;justify-content:space-between!important;align-items:center!important}
+#servicos.cinema-mobile-mode .cinema-header-left{gap:0!important;display:block!important}
+#servicos.cinema-mobile-mode .cinema-counter-badge{display:block!important;border:0!important;padding:0!important;margin-bottom:4px!important;font-size:11px!important}
+#servicos.cinema-mobile-mode .cinema-header-title{font-size:19px!important;max-width:200px!important;line-height:1.15!important}
+#servicos.cinema-mobile-mode .cinema-header-subtitle{display:none!important}
+#servicos.cinema-mobile-mode .cinema-header-right{display:flex!important;align-items:center!important;gap:8px!important}
+#servicos.cinema-mobile-mode .cinema-budget-btn{min-height:38px!important;padding:8px 14px!important;font-size:11px!important}
+#servicos.cinema-mobile-mode #cinema-track-viewport{position:relative!important;width:100%!important;height:auto!important;min-height:0!important;overflow-x:scroll!important;overflow-y:hidden!important;scroll-snap-type:x mandatory!important;-webkit-overflow-scrolling:touch!important;scrollbar-width:none!important;overscroll-behavior-x:contain!important;touch-action:pan-x pan-y!important;padding:6px 0 14px!important;margin:0!important}
+#servicos.cinema-mobile-mode #cinema-track-viewport::-webkit-scrollbar{display:none!important}
+#servicos.cinema-mobile-mode .cinema-track{position:relative!important;inset:auto!important;display:flex!important;flex-direction:row!important;flex-wrap:nowrap!important;gap:16px!important;padding:0 8vw!important;width:max-content!important;height:auto!important;transform:none!important;touch-action:pan-x pan-y!important}
+#servicos.cinema-mobile-mode .cinema-card{position:relative!important;left:auto!important;top:auto!important;width:76vw!important;max-width:310px!important;aspect-ratio:9/16!important;height:auto!important;flex-shrink:0!important;scroll-snap-align:center!important;scroll-snap-stop:always!important;transform:none!important;opacity:1!important;visibility:visible!important;pointer-events:auto!important;touch-action:pan-x pan-y!important;border-radius:18px!important;overflow:hidden!important;box-shadow:0 16px 36px rgba(0,0,0,0.45)!important}
+#servicos.cinema-mobile-mode .cinema-media-shell,#servicos.cinema-mobile-mode .cinema-video{width:100%!important;height:100%!important;object-fit:cover!important;border-radius:18px!important}
+#servicos.cinema-mobile-mode .cinema-card-collapsed-badge{display:none!important}
+#servicos.cinema-mobile-mode .cinema-overlay-controls{position:relative!important;inset:auto!important;padding:4px 6% 0!important;display:flex!important;align-items:center!important;justify-content:space-between!important;min-height:auto!important;gap:10px!important}
+#servicos.cinema-mobile-mode .cinema-overlay-controls .cinema-info-group{flex:1!important;min-width:0!important}
+#servicos.cinema-mobile-mode .cinema-overlay-controls .cinema-info-title{font-size:15px!important;white-space:nowrap!important;overflow:hidden!important;text-overflow:ellipsis!important;line-height:1.25!important}
+#servicos.cinema-mobile-mode .cinema-info-tag{display:none!important}
+#servicos.cinema-mobile-mode .cinema-actions-group{margin-top:0!important;flex-shrink:0!important;padding:3px!important}
+#servicos.cinema-mobile-mode .cinema-glass-btn{width:34px!important;height:34px!important;min-height:34px!important}
+#servicos.cinema-mobile-mode .cinema-chapters{margin:6px auto 0!important;padding:5px 12px!important;gap:6px!important}
+#servicos.cinema-mobile-mode .cinema-chapters button{width:6px!important;height:3px!important}
+#servicos.cinema-mobile-mode .cinema-chapters button[aria-current=true]{width:18px!important}
+#servicos.cinema-mobile-mode .cinema-position{display:none!important}
+
+@media(max-width:991px){
  #cinema-skip-link{display:none!important}
- #servicos{height:auto!important;padding:28px 0 20px!important}
- #cinema-sticky-stage{position:relative!important;top:0!important;height:auto!important;display:flex!important;flex-direction:column!important;padding:0 0 10px!important;gap:14px!important}
+ #servicos.cinema-scroll-section,#servicos{height:auto!important;padding:28px 0 20px!important}
+ #cinema-sticky-stage{position:relative!important;top:0!important;height:auto!important;min-height:0!important;display:flex!important;flex-direction:column!important;padding:0 0 10px!important;gap:14px!important}
  .cinema-stage-header{padding:0 5%!important;display:flex!important;justify-content:space-between!important;align-items:center!important}
  .cinema-header-left{gap:0!important;display:block!important}
  .cinema-counter-badge{display:block!important;border:0!important;padding:0!important;margin-bottom:4px!important;font-size:11px!important}
@@ -64,10 +91,10 @@
  .cinema-header-subtitle{display:none!important}
  .cinema-header-right{display:flex!important;align-items:center!important;gap:8px!important}
  .cinema-budget-btn{min-height:38px!important;padding:8px 14px!important;font-size:11px!important}
- #cinema-track-viewport{position:relative!important;width:100%!important;height:auto!important;overflow-x:auto!important;overflow-y:hidden!important;scroll-snap-type:x mandatory!important;-webkit-overflow-scrolling:touch!important;scrollbar-width:none!important;overscroll-behavior-x:contain!important;padding:6px 0 14px!important;margin:0!important}
+ #cinema-track-viewport{position:relative!important;width:100%!important;height:auto!important;min-height:0!important;overflow-x:scroll!important;overflow-y:hidden!important;scroll-snap-type:x mandatory!important;-webkit-overflow-scrolling:touch!important;scrollbar-width:none!important;overscroll-behavior-x:contain!important;touch-action:pan-x pan-y!important;padding:6px 0 14px!important;margin:0!important}
  #cinema-track-viewport::-webkit-scrollbar{display:none!important}
- .cinema-track{position:relative!important;inset:auto!important;display:flex!important;flex-direction:row!important;gap:16px!important;padding:0 8vw!important;width:max-content!important;height:auto!important;transform:none!important}
- .cinema-card{position:relative!important;left:auto!important;top:auto!important;width:76vw!important;max-width:310px!important;aspect-ratio:9/16!important;height:auto!important;flex-shrink:0!important;scroll-snap-align:center!important;scroll-snap-stop:always!important;transform:none!important;opacity:1!important;visibility:visible!important;pointer-events:auto!important;border-radius:18px!important;overflow:hidden!important;box-shadow:0 16px 36px rgba(0,0,0,0.45)!important}
+ .cinema-track{position:relative!important;inset:auto!important;display:flex!important;flex-direction:row!important;flex-wrap:nowrap!important;gap:16px!important;padding:0 8vw!important;width:max-content!important;height:auto!important;transform:none!important;touch-action:pan-x pan-y!important}
+ .cinema-card{position:relative!important;left:auto!important;top:auto!important;width:76vw!important;max-width:310px!important;aspect-ratio:9/16!important;height:auto!important;flex-shrink:0!important;scroll-snap-align:center!important;scroll-snap-stop:always!important;transform:none!important;opacity:1!important;visibility:visible!important;pointer-events:auto!important;touch-action:pan-x pan-y!important;border-radius:18px!important;overflow:hidden!important;box-shadow:0 16px 36px rgba(0,0,0,0.45)!important}
  .cinema-media-shell,.cinema-video{width:100%!important;height:100%!important;object-fit:cover!important;border-radius:18px!important}
  .cinema-card-collapsed-badge{display:none!important}
  .cinema-overlay-controls{position:relative!important;inset:auto!important;padding:4px 6% 0!important;display:flex!important;align-items:center!important;justify-content:space-between!important;min-height:auto!important;gap:10px!important}
