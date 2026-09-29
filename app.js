@@ -800,6 +800,13 @@ $$('.work-card').forEach(card=>{
   });
 });
 
+// Garante que o clique no botão do Instagram dentro do card abra o link sem abrir a modal
+$$('.work-card-insta-btn').forEach(btn => {
+  btn.addEventListener('click', e => {
+    e.stopPropagation();
+  });
+});
+
 // Fallback gracioso para falha de carregamento de imagens remotas
 $$('.work-card img').forEach(img => {
   img.addEventListener('error', () => {

@@ -2088,6 +2088,62 @@ html {
   color: #A6ACB8;
 }
 
+/* Botão Elegante de Destaques nos Cards */
+.work-card-insta-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  margin-top: 8px;
+  padding: 6px 13px;
+  background: rgba(255, 255, 255, 0.16);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.32);
+  border-radius: 999px;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  font-size: 12px;
+  font-weight: 500;
+  color: #ffffff !important;
+  text-decoration: none;
+  line-height: 1.2;
+  width: fit-content;
+  max-width: 100%;
+  transition: all 180ms cubic-bezier(0.22, 1, 0.36, 1);
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.28);
+  pointer-events: auto !important;
+  cursor: pointer;
+  z-index: 5;
+  position: relative;
+}
+
+.work-card-insta-btn .insta-mini-icon {
+  color: #FF5E7E;
+  flex-shrink: 0;
+}
+
+.work-card-insta-btn .ui-arrow {
+  color: rgba(255, 255, 255, 0.85);
+  transition: transform 180ms ease;
+  flex-shrink: 0;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .work-card-insta-btn:hover {
+    background: rgba(255, 255, 255, 0.28);
+    border-color: rgba(255, 255, 255, 0.55);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.4);
+    color: #ffffff !important;
+  }
+  .work-card-insta-btn:hover .ui-arrow {
+    transform: translate(2px, -2px);
+  }
+}
+
+.work-card-insta-btn:active {
+  transform: scale(0.96);
+}
+
 /* Cards Laterais Informativos com Efeito Glass */
 .work-sidebar-card {
   border-radius: 20px;
