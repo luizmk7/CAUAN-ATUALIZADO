@@ -44,31 +44,74 @@
     nav.append(btn);
     card.tabIndex = 0;
     card.setAttribute('role', 'button');
-    card.setAttribute('aria-label', `Ampliar: ${card.dataset.title}`);
-    card.addEventListener('click', e => { if (!e.target.closest('video[controls]')) goTo(i); });
+    card.setAttribute('aria-label', `Ampliar ou reproduzir: ${card.dataset.title}`);
+    card.addEventListener('click', e => {
+      if (e.target.closest('video[controls]')) return;
+      manualPause.delete(i);
+      if (active === i) {
+        if (video.paused) {
+          startVideo(i);
+        } else {
+          manualPause.add(i);
+          video.pause();
+        }
+      } else {
+        goTo(i);
+        startVideo(i);
+      }
+      updateControls();
+    });
     card.addEventListener('keydown', e => {
       if (e.target !== card) return;
-      if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); goTo(i); }
+      if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault();
+        manualPause.delete(i);
+        if (active === i) {
+          if (video.paused) startVideo(i);
+          else { manualPause.add(i); video.pause(); }
+        } else {
+          goTo(i);
+          startVideo(i);
+        }
+        updateControls();
+      }
     });
+    const soundBadge = card.querySelector('.cinema-card-sound-badge');
+    if (soundBadge) {
+      soundBadge.addEventListener('click', e => {
+        e.stopPropagation();
+        e.preventDefault();
+        toggleSound();
+      });
+    }
     const video = videos[i];
-    video.preload = 'none';
     video.muted = true;
+    video.defaultMuted = true;
     video.playsInline = true;
     video.addEventListener('loadedmetadata', schedule);
     video.addEventListener('play', () => {
       videos.forEach(other => { if (other !== video) other.pause(); });
-      blocked.delete(i);
       updateControls();
     });
     video.addEventListener('pause', updateControls);
     video.addEventListener('error', () => {
-      blocked.add(i);
       updateControls();
       const playText = byId('cinema-play-text');
       if (active === i && playText) playText.textContent = 'Tentar novamente';
     });
   });
   stage.append(nav);
+
+  function toggleSound(force) {
+    soundOn = typeof force === 'boolean' ? force : !soundOn;
+    videos.forEach((v, idx) => {
+      v.muted = idx === active ? !soundOn : true;
+      if (!v.muted) v.volume = 1.0;
+    });
+    manualPause.delete(active);
+    startVideo(active);
+    updateControls();
+  }
 
   function updateControls() {
     const playing = videos[active] && !videos[active].paused;
@@ -88,18 +131,41 @@
       sound.setAttribute('aria-pressed', String(soundOn));
       sound.setAttribute('aria-label', soundOn ? 'Desativar som' : 'Ativar som');
     }
+    const soundBadges = section.querySelectorAll('.cinema-card-sound-badge');
+    soundBadges.forEach(badge => {
+      badge.classList.toggle('is-sound-on', soundOn);
+      const text = badge.querySelector('.sound-status-text');
+      if (text) text.textContent = soundOn ? 'Som ligado' : 'Ativar som';
+      const icon = badge.querySelector('.sound-off-icon');
+      if (icon) {
+        icon.innerHTML = soundOn
+          ? '<polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"></path>'
+          : '<polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><line x1="23" y1="9" x2="17" y2="15"></line><line x1="17" y1="9" x2="23" y2="15"></line>';
+      }
+    });
   }
   function startVideo(index) {
     const video = videos[index];
-    if (!video.paused || pending.has(index) || blocked.has(index)) return;
+    if (!video || !video.paused || pending.has(index)) return;
     pending.add(index);
     video.muted = !soundOn;
-    video.play().then(() => {
-      if (!pinned || active !== index || reduced || document.hidden || manualPause.has(index)) video.pause();
-    }).catch(() => blocked.add(index)).finally(() => {
+    video.defaultMuted = true;
+    const playPromise = video.play();
+    if (playPromise && typeof playPromise.then === 'function') {
+      playPromise.then(() => {
+        if (active !== index || document.hidden || manualPause.has(index)) {
+          video.pause();
+        }
+      }).catch(err => {
+        console.warn('Play notice:', err && err.name);
+      }).finally(() => {
+        pending.delete(index);
+        updateControls();
+      });
+    } else {
       pending.delete(index);
       updateControls();
-    });
+    }
   }
   function measure() {
     const header = document.querySelector('.site-header');
@@ -149,10 +215,9 @@
     const maxH = height - (innerWidth <= 700 ? 20 : 28);
     cards.forEach((card, i) => {
       card.tabIndex = i === active ? 0 : -1;
-      card.setAttribute('role', 'button');
       const video = videos[i];
-      const ratio = video.videoWidth && video.videoHeight ? video.videoWidth / video.videoHeight : (i === 1 ? 9 / 16 : 16 / 9);
-      const cardW = Math.min(baseW, height * .67 * ratio);
+      const ratio = 9 / 16;
+      const cardW = Math.min(baseW, height * .72 * ratio);
       const cardH = cardW / ratio;
       const openW = Math.min(maxW, maxH * ratio);
       const openH = openW / ratio;
@@ -172,22 +237,27 @@
       card.style.pointerEvents = distance > 1.1 || (expansion > .5 && i !== index) ? 'none' : 'auto';
       const badge = card.querySelector('.cinema-card-collapsed-badge');
       if (badge) badge.style.opacity = String(1 - smooth(e * 2));
-      card.setAttribute('aria-current', String(i === active));
-      if (i !== active || !pinned || reduced || document.hidden || manualPause.has(i)) video.pause();
-      else startVideo(i);
+      const inView = rect.top < window.innerHeight && rect.bottom > 80;
+      if (i !== active || !inView || reduced || document.hidden || manualPause.has(i)) {
+        if (!video.paused) video.pause();
+      } else {
+        startVideo(i);
+      }
     });
     counter.textContent = `${pad(active + 1)} / ${pad(cards.length)}`;
     title.textContent = cards[active].dataset.title;
-    tag.textContent = cards[active].dataset.category;
+    if (tag) tag.textContent = cards[active].dataset.category;
     [...nav.children].forEach((button, i) => button.setAttribute('aria-current', String(i === active)));
     progress.style.transform = `scaleX(${clamp(amount / total)})`;
     updateControls();
   }
   function schedule() { if (!frame) frame = requestAnimationFrame(render); }
   function goTo(index) {
+    manualPause.delete(index);
     if (reduced) { videos[index].focus(); return; }
     const top = section.getBoundingClientRect().top + scrollY - topOffset;
     scrollTo({top: top + (lead + index + .4) * unit, behavior: 'smooth'});
+    setTimeout(() => startVideo(index), 100);
   }
   if (play) {
     play.addEventListener('click', () => {
@@ -200,12 +270,7 @@
   }
   if (sound) {
     sound.addEventListener('click', () => {
-      soundOn = !soundOn;
-      videos.forEach((video, i) => { video.muted = i === active ? !soundOn : true; });
-      blocked.delete(active);
-      manualPause.delete(active);
-      startVideo(active);
-      updateControls();
+      toggleSound();
     });
   }
   if (fullscreen) {
@@ -264,6 +329,13 @@
     sectionObserver.observe(section);
   }
   window.addEventListener('load', measure, {once: true});
-  if (document.fonts) document.fonts.ready.then(measure);
+  const userGestureUnlock = () => {
+    if (!document.hidden && !manualPause.has(active)) {
+      const vid = videos[active];
+      if (vid && vid.paused) startVideo(active);
+    }
+  };
+  window.addEventListener('pointerdown', userGestureUnlock, { passive: true });
+  window.addEventListener('touchstart', userGestureUnlock, { passive: true });
   measure();
 })();

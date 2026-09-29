@@ -429,7 +429,7 @@ function getCategoryItems(cat) {
   // 1. Prioridade: PORTFOLIO_MANIFEST dinamicamente avaliado no momento do clique
   if (typeof PORTFOLIO_MANIFEST !== 'undefined' && Array.isArray(PORTFOLIO_MANIFEST)) {
     const matched = PORTFOLIO_MANIFEST.filter(i => i.category === cat).map(i => ({
-      src: i.url,
+      src: i.url || i.src,
       alt: i.alt || i.title || '',
       title: i.title || '',
       caption: i.caption || ''
@@ -438,7 +438,7 @@ function getCategoryItems(cat) {
   }
   if (typeof window !== 'undefined' && Array.isArray(window.PORTFOLIO_MANIFEST)) {
     const matched = window.PORTFOLIO_MANIFEST.filter(i => i.category === cat).map(i => ({
-      src: i.url,
+      src: i.url || i.src,
       alt: i.alt || i.title || '',
       title: i.title || '',
       caption: i.caption || ''
@@ -538,9 +538,10 @@ function openCategoryModal(catKey, triggerEl) {
         frame.className = 'cat-large-photo-frame';
 
         const img = document.createElement('img');
-        const thumbUrl = getOptimizedCloudinaryUrl(item.src, { width: 650 });
+        const mediaSource = item.src || item.url;
+        const thumbUrl = getOptimizedCloudinaryUrl(mediaSource, { width: 650 });
         img.src = thumbUrl;
-        img.srcset = getCloudinarySrcset(item.src, [400, 650]);
+        img.srcset = getCloudinarySrcset(mediaSource, [400, 650]);
         img.sizes = '(max-width: 540px) 92vw, (max-width: 900px) 46vw, 360px';
         img.alt = item.alt || gallery.title;
         img.loading = index < 4 ? 'eager' : 'lazy';
@@ -574,7 +575,7 @@ function openCategoryModal(catKey, triggerEl) {
             title: item.title || gallery.title,
             category: gallery.title.replace('Galeria · ', ''),
             mediaType: 'photo',
-            image: item.src,
+            image: mediaSource,
             caption: item.caption || item.alt || ''
           };
           openModal(detailData, card);

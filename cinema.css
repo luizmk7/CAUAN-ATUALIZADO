@@ -8,26 +8,38 @@
 .cinema-header-subtitle{font-size:12px;color:#9e9e9e;margin:6px 0 0}
 .cinema-header-right{display:flex;align-items:center;gap:22px}
 .cinema-skip-link{font-size:12px;color:#a7a7a7;padding:12px 0;white-space:nowrap}
-.cinema-budget-btn,.cinema-glass-btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:44px;padding:10px 17px;border-radius:40px;color:#f5f5f3;background:#ffffff0e;border:1px solid #ffffff25;box-shadow:inset 0 1px 0 #ffffff0a;backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);font-size:12px;white-space:nowrap;transition:background .2s}
-.cinema-budget-btn:hover,.cinema-glass-btn:hover{background:#ffffff20}
+.cinema-budget-btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:44px;padding:10px 17px;border-radius:40px;color:#f5f5f3;background:#ffffff0e;border:1px solid #ffffff25;box-shadow:inset 0 1px 0 #ffffff0a;backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);font-size:12px;white-space:nowrap;transition:background .2s}
+.cinema-budget-btn:hover{background:#ffffff20}
 #cinema-track-viewport{position:relative;width:100%;height:100%;min-height:0;overflow:hidden;margin:0}
 .cinema-track{position:absolute;inset:0;width:100%;height:100%;transform:none}
 .cinema-card{position:absolute;left:0;top:0;margin:0;aspect-ratio:auto;overflow:hidden;background:#080808;border:1px solid #ffffff14;border-radius:18px;transform-origin:0 0;will-change:transform;cursor:pointer;box-shadow:0 24px 50px #0003}
 .cinema-media-shell,.cinema-video{width:100%;height:100%;display:block;margin:0;background:#080808}
 .cinema-media-shell{position:relative}
-.cinema-video{object-fit:contain}
+.cinema-video{object-fit:cover;border-radius:inherit}
 .cinema-card-ambient-tint{display:none}
 .cinema-card-collapsed-badge{position:absolute;bottom:15px;left:15px;font-size:11px;letter-spacing:.08em;background:#1119;border:1px solid #ffffff20;padding:8px 12px;border-radius:30px;backdrop-filter:blur(14px);pointer-events:none}
 .cinema-card-collapsed-badge .live-dot-pulse{display:none}
+.cinema-card-sound-badge{position:absolute;top:12px;right:12px;z-index:10;display:inline-flex;align-items:center;justify-content:center;width:34px;height:34px;min-height:34px;padding:0;border-radius:50%;background:rgba(14,16,20,0.68);border:1px solid rgba(255,255,255,0.18);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);color:#ffffff;font-size:11px;font-weight:500;cursor:pointer;box-shadow:0 4px 16px rgba(0,0,0,0.4);transition:all .2s cubic-bezier(0.16,1,0.3,1);pointer-events:auto}
+.cinema-card-sound-badge:hover{background:rgba(255,255,255,0.22);transform:scale(1.06)}
+.cinema-card-sound-badge:active{transform:scale(.94)}
+.cinema-card-sound-badge.is-sound-on{background:rgba(255,255,255,0.92);color:#101112;border-color:#ffffff}
+.cinema-card-sound-badge .sound-status-text{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
 .cinema-overlay-controls{padding:4px 4% 15px;display:flex;align-items:center;justify-content:space-between;gap:24px;position:relative;z-index:5;opacity:1;pointer-events:auto;margin:0;min-height:70px}
 .cinema-info-group{min-width:0}
 .cinema-info-tag{display:block;font-size:11px;text-transform:uppercase;letter-spacing:.14em;color:#aaa;margin-bottom:7px}
 .cinema-info-title{font-family:Manrope,sans-serif;font-weight:500;font-size:clamp(17px,2vw,26px);color:#f6f6f4;margin:0;line-height:1.25;max-width:650px}
-.cinema-actions-group{display:flex;gap:8px;flex-shrink:0}
-.cinema-chapters{display:flex;justify-content:center;gap:6px;padding:0 4%}
-.cinema-chapters button{border:0;border-radius:50%;background:none;color:#868686;font-size:11px;font-variant-numeric:tabular-nums;width:44px;height:36px;position:relative}
-.cinema-chapters button[aria-current=true]{color:#fff}
-.cinema-chapters button[aria-current=true]:after{content:'';position:absolute;width:14px;height:1px;background:#fff;bottom:3px;left:15px}
+.cinema-actions-group{display:inline-flex;align-items:center;gap:4px;flex-shrink:0;background:rgba(18,20,24,0.65);border:1px solid rgba(255,255,255,0.12);backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);padding:4px;border-radius:999px;box-shadow:0 8px 24px rgba(0,0,0,0.35)}
+.cinema-glass-btn{display:inline-flex;align-items:center;justify-content:center;width:36px;height:36px;min-height:36px;padding:0;border-radius:50%;border:1px solid transparent;background:transparent;color:#c0c4cc;box-shadow:none;backdrop-filter:none;-webkit-backdrop-filter:none;cursor:pointer;transition:all .2s cubic-bezier(0.16,1,0.3,1);position:relative}
+.cinema-glass-btn:hover{color:#ffffff;background:rgba(255,255,255,0.12);border-color:rgba(255,255,255,0.16);transform:translateY(-1px)}
+.cinema-glass-btn:active{transform:scale(.94);background:rgba(255,255,255,0.18)}
+.cinema-glass-btn[aria-pressed="true"]{color:#ffffff}
+.cinema-glass-btn#cinema-audio-btn[aria-pressed="true"]{background:rgba(255,255,255,0.16);color:#ffffff;border-color:rgba(255,255,255,0.22)}
+.cinema-glass-btn span[id$="-text"],.cinema-glass-btn .sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+.cinema-chapters{display:flex;align-items:center;justify-content:center;gap:8px;padding:6px 14px;margin:6px auto 0;width:fit-content;background:rgba(14,16,20,0.55);border:1px solid rgba(255,255,255,0.1);border-radius:999px;backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);box-shadow:0 8px 24px rgba(0,0,0,0.35);position:relative;z-index:5}
+.cinema-chapters button{border:0;padding:0;margin:0;width:8px;height:4px;border-radius:999px;background:rgba(255,255,255,0.22);color:transparent;font-size:0;line-height:0;cursor:pointer;outline-offset:4px;transition:width .3s cubic-bezier(0.16,1,0.3,1),background .25s ease,transform .2s;position:relative}
+.cinema-chapters button:hover{background:rgba(255,255,255,0.55);transform:scaleY(1.3)}
+.cinema-chapters button[aria-current=true]{width:24px;background:#ffffff;box-shadow:0 0 10px rgba(255,255,255,0.35)}
+.cinema-chapters button[aria-current=true]:after{display:none}
 .cinema-position{position:absolute;bottom:0;left:0;right:0;height:2px;background:#ffffff12}
 .cinema-position span{display:block;width:100%;height:100%;transform:scaleX(0);transform-origin:left;background:#d5d5d1}
 .cinema-card:focus-visible{outline:2px solid white;outline-offset:5px}
@@ -45,10 +57,11 @@
  .cinema-overlay-controls{padding:0 5% 12px;display:block;min-height:114px}
  .cinema-info-title{font-size:18px;max-width:100%;line-height:1.3}
  .cinema-info-tag{font-size:10px;margin-bottom:5px}
- .cinema-actions-group{margin-top:14px;gap:7px}
- .cinema-glass-btn{padding:8px 12px;font-size:11px;min-height:44px}
- .cinema-chapters button{height:44px}
- .cinema-chapters button[aria-current=true]:after{bottom:7px}
+ .cinema-actions-group{margin-top:10px;gap:3px;padding:3px}
+ .cinema-glass-btn{width:34px;height:34px;min-height:34px;padding:0}
+ .cinema-chapters{margin:8px auto 0;padding:5px 12px;gap:6px}
+ .cinema-chapters button{width:6px;height:3px}
+ .cinema-chapters button[aria-current=true]{width:18px}
  .cinema-card-collapsed-badge{font-size:9px;padding:6px 10px;bottom:10px;left:10px}
 }
 @media(max-height:520px) and (min-width:701px){
@@ -56,13 +69,13 @@
  .cinema-header-subtitle,.cinema-info-tag{display:none}
  .cinema-overlay-controls{min-height:46px;padding-bottom:0}
  .cinema-header-title,.cinema-info-title{font-size:16px}
- .cinema-chapters button{height:28px}
+ .cinema-chapters{margin-top:2px;padding:4px 10px}
 }
 #servicos.cinema-reduced{height:auto!important}
 .cinema-reduced #cinema-sticky-stage{position:relative;top:0;height:auto;display:block;padding:35px 0}
 .cinema-reduced #cinema-track-viewport{height:auto;overflow:visible}
 .cinema-reduced .cinema-track{position:relative;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:24px;padding:30px 5%;height:auto}
-.cinema-reduced .cinema-card{position:relative;width:100%;height:auto;aspect-ratio:16/9;transform:none;visibility:visible;opacity:1}
+.cinema-reduced .cinema-card{position:relative;width:100%;height:auto;aspect-ratio:9/16;max-width:360px;margin-inline:auto;transform:none;visibility:visible;opacity:1}
 .cinema-reduced .cinema-card-collapsed-badge{display:none}
 .cinema-reduced .cinema-overlay-controls,.cinema-reduced .cinema-chapters,.cinema-reduced .cinema-position,.cinema-reduced .cinema-header-subtitle{display:none}
 @media(max-width:700px){.cinema-reduced .cinema-track{grid-template-columns:1fr}}
