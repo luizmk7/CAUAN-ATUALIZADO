@@ -2902,7 +2902,6 @@ dialog .close:hover {
     display: flex;
     overflow-x: auto;
     overflow-y: hidden;
-    overflow-y: clip;
     scroll-snap-type: x mandatory;
     -webkit-overflow-scrolling: touch;
     align-items: stretch;
@@ -2913,8 +2912,7 @@ dialog .close:hover {
     padding-left: 6%;
     padding-right: 14%;
     scrollbar-width: none;
-    overscroll-behavior-y: none;
-    touch-action: pan-x;
+    touch-action: pan-x pan-y;
   }
 
   .category-cards-grid::-webkit-scrollbar {
@@ -2929,7 +2927,7 @@ dialog .close:hover {
     scroll-snap-align: start;
     align-self: stretch;
     transform: none;
-    touch-action: pan-x;
+    touch-action: pan-x pan-y;
   }
 
   .work-media-container,
@@ -3796,10 +3794,6 @@ dialog .close:hover {
     flex-wrap: nowrap !important;
     overflow-x: auto !important;
     overflow-y: hidden !important;
-    overflow-y: clip !important;
-    height: 484px !important;
-    min-height: 484px !important;
-    max-height: 484px !important;
     scroll-snap-type: x mandatory !important;
     -webkit-overflow-scrolling: touch !important;
     align-items: stretch !important;
@@ -3807,9 +3801,7 @@ dialog .close:hover {
     padding: 8px 5% 16px !important;
     margin: 0 -5% !important;
     scrollbar-width: none !important;
-    overscroll-behavior-y: none !important;
-    overscroll-behavior-x: contain !important;
-    touch-action: pan-x !important;
+    touch-action: pan-x pan-y !important;
   }
 
   .category-cards-grid::-webkit-scrollbar {
@@ -3831,7 +3823,7 @@ dialog .close:hover {
     margin: 0 !important;
     transform: none !important;
     align-self: stretch !important;
-    touch-action: pan-x !important;
+    touch-action: pan-x pan-y !important;
     user-select: none !important;
     -webkit-user-select: none !important;
     -webkit-user-drag: none !important;
