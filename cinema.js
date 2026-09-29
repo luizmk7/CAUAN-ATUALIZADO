@@ -259,6 +259,7 @@
       section.style.height = 'auto';
       section.style.removeProperty('--cinema-top');
       section.style.removeProperty('--cinema-height');
+      if (skip) skip.style.setProperty('display', 'none', 'important');
       stage.style.position = 'relative';
       stage.style.top = '0px';
       stage.style.height = 'auto';
@@ -276,6 +277,7 @@
       updateMobileActive();
       return;
     }
+    if (skip) skip.style.removeProperty('display');
     stage.style.removeProperty('position');
     stage.style.removeProperty('top');
     stage.style.removeProperty('height');

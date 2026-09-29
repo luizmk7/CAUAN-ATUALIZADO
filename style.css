@@ -4887,5 +4887,19 @@ dialog.cat-modal.is-closing::backdrop {
   transform: none !important;
 }
 
-
-
+/* Ocultar terminantemente no mobile qualquer indicação que pede para rolar para baixo */
+@media (max-width: 991px) {
+  #cinema-skip-link,
+  .cinema-skip-link,
+  .desktop-only-cue,
+  .scroll-light-track,
+  .scroll-cue-text-block,
+  .scroll-cue-main,
+  .scroll-cue-sub,
+  .scroll-cue-chevron {
+    display: none !important;
+    visibility: hidden !important;
+    opacity: 0 !important;
+    pointer-events: none !important;
+  }
+}
