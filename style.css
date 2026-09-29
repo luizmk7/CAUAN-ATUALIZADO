@@ -2088,22 +2088,29 @@ html {
   color: #A6ACB8;
 }
 
-/* Design Clean & Discreto para Link de Destaques nos Cards */
+/* Design Clean & Discreto em Cor Clara (#FFFFFF) para Link de Destaques nos Cards */
 .work-card-insta-btn,
 .work-card-insta-btn:link,
 .work-card-insta-btn:visited,
+.work-card-insta-btn:hover,
+.work-card-insta-btn:active,
+.work-card-insta-btn:focus,
 .work-card-insta-btn span,
 .work-card-insta-btn:link span,
-.work-card-insta-btn:visited span {
-  color: rgba(255, 255, 255, 0.85) !important;
-  -webkit-text-fill-color: rgba(255, 255, 255, 0.85) !important;
+.work-card-insta-btn:visited span,
+.work-card-insta-btn:hover span,
+.work-card-insta-btn:active span,
+.work-card-insta-btn * {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.8) !important;
 }
 
 .work-card-insta-btn {
   display: inline-flex;
   align-items: center;
   gap: 6px;
-  margin-top: 4px;
+  margin-top: 5px;
   padding: 3px 0;
   background: transparent !important;
   border: none !important;
@@ -2111,62 +2118,58 @@ html {
   backdrop-filter: none !important;
   -webkit-backdrop-filter: none !important;
   font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-  font-size: 12.5px;
-  font-weight: 400;
+  font-size: 13px;
+  font-weight: 500;
   text-decoration: none !important;
   line-height: 1.4;
   width: fit-content;
   max-width: 100%;
-  transition: all 180ms ease;
+  transition: opacity 180ms ease, transform 180ms ease;
   pointer-events: auto !important;
   cursor: pointer;
   z-index: 5;
   position: relative;
-  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.7);
+  opacity: 0.95;
 }
 
 .work-card-insta-btn::after {
   content: '';
   position: absolute;
   left: 0;
-  bottom: 1px;
+  bottom: 0px;
   width: 100%;
   height: 1px;
-  background: rgba(255, 255, 255, 0.28);
-  transition: background 180ms ease, opacity 180ms ease;
+  background: #FFFFFF !important;
+  opacity: 0.45;
+  transition: opacity 180ms ease;
 }
 
 .work-card-insta-btn .insta-mini-icon {
-  color: rgba(255, 255, 255, 0.78) !important;
-  stroke: rgba(255, 255, 255, 0.78) !important;
-  width: 12px;
-  height: 12px;
+  color: #FFFFFF !important;
+  stroke: #FFFFFF !important;
+  width: 13px;
+  height: 13px;
   flex-shrink: 0;
-  transition: all 180ms ease;
+  opacity: 0.9;
 }
 
 .work-card-insta-btn .ui-arrow {
-  color: rgba(255, 255, 255, 0.75) !important;
-  stroke: rgba(255, 255, 255, 0.75) !important;
-  width: 9px;
-  height: 9px;
-  transition: transform 180ms ease, color 180ms ease;
+  color: #FFFFFF !important;
+  stroke: #FFFFFF !important;
+  width: 10px;
+  height: 10px;
   flex-shrink: 0;
+  opacity: 0.9;
+  transition: transform 180ms ease;
 }
 
 @media (hover: hover) and (pointer: fine) {
-  .work-card-insta-btn:hover,
-  .work-card-insta-btn:hover span {
-    color: #FFFFFF !important;
-    -webkit-text-fill-color: #FFFFFF !important;
+  .work-card-insta-btn:hover {
+    opacity: 1;
+    transform: translateY(-1px);
   }
   .work-card-insta-btn:hover::after {
-    background: rgba(255, 255, 255, 0.85);
-  }
-  .work-card-insta-btn:hover .insta-mini-icon,
-  .work-card-insta-btn:hover .ui-arrow {
-    color: #FFFFFF !important;
-    stroke: #FFFFFF !important;
+    opacity: 0.85;
   }
   .work-card-insta-btn:hover .ui-arrow {
     transform: translate(2px, -2px);
