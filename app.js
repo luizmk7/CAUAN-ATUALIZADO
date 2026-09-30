@@ -766,36 +766,44 @@ $$('.work-card').forEach(card=>{
     return;
   }
 
-  card.setAttribute('aria-label',`Ver detalhes de ${card.dataset.title||'trabalho'}`);
+  card.setAttribute('aria-label', card.dataset.link ? `Abrir destaques de ${card.dataset.title||'trabalho'} no Instagram` : `Ver detalhes de ${card.dataset.title||'trabalho'}`);
 
-  card.addEventListener('click',e=>{
-    if(e.target.closest('a'))return;
-    const d={
-      title:card.dataset.title,
-      category:card.dataset.category,
-      mediaType:card.dataset.mediaType,
-      image:card.dataset.image,
-      caption:card.dataset.caption,
-      videoSrc:card.dataset.videoSrc,
-      link:card.dataset.link
+  card.addEventListener('click', e => {
+    if (e.target.closest('a')) return;
+    if (card.dataset.link) {
+      window.open(card.dataset.link, '_blank', 'noopener,noreferrer');
+      return;
+    }
+    const d = {
+      title: card.dataset.title,
+      category: card.dataset.category,
+      mediaType: card.dataset.mediaType,
+      image: card.dataset.image,
+      caption: card.dataset.caption,
+      videoSrc: card.dataset.videoSrc,
+      link: card.dataset.link
     };
-    openModal(d,card);
+    openModal(d, card);
   });
 
-  card.addEventListener('keydown',e=>{
-    if(e.key==='Enter'||e.key===' '){
-      if(e.target.closest('a'))return;
+  card.addEventListener('keydown', e => {
+    if (e.key === 'Enter' || e.key === ' ') {
+      if (e.target.closest('a')) return;
       e.preventDefault();
-      const d={
-        title:card.dataset.title,
-        category:card.dataset.category,
-        mediaType:card.dataset.mediaType,
-        image:card.dataset.image,
-        caption:card.dataset.caption,
-        videoSrc:card.dataset.videoSrc,
-        link:card.dataset.link
+      if (card.dataset.link) {
+        window.open(card.dataset.link, '_blank', 'noopener,noreferrer');
+        return;
+      }
+      const d = {
+        title: card.dataset.title,
+        category: card.dataset.category,
+        mediaType: card.dataset.mediaType,
+        image: card.dataset.image,
+        caption: card.dataset.caption,
+        videoSrc: card.dataset.videoSrc,
+        link: card.dataset.link
       };
-      openModal(d,card);
+      openModal(d, card);
     }
   });
 });
